@@ -7,7 +7,6 @@ export const manifest: ResolverManifest = {
             assets:
             {
                 Platform: "platform.png",
-                robot: "robot.json",
                 LogoPixi: "logopixi.svg",
                 Panel: "panel3.png",
                 Next: "next.svg",
