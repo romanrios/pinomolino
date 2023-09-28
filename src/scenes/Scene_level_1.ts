@@ -6,22 +6,29 @@ import { Platform } from "../game/Platform";
 import { checkCollision } from "../game/IHitbox";
 import { Easing, Tween } from "tweedle.js";
 import { Item } from "../game/Item";
-import { Sound } from "@pixi/sound";
-
+import { Sound, sound } from "@pixi/sound";
+import { Button_pino } from "../UI/Button_pino";
+import { Scene_title } from "./Scene_title";
 
 
 export class Scene_level_1 extends Container implements IScene {
 
     private playerRobot: Player_clase12;
-    private platforms: Platform[];
+    private platforms: Platform[] = [];
     private platform1: Platform;
     private platform2: Platform;
     private platform3: Platform;
     private world: Container;
     private background: TilingSprite;
     private table: TilingSprite;
-    private items: Item[];
+    private items: Item[] = [];
     private UI_number: Text;
+    private platform4: Platform;
+    private platform5: Platform;
+    private cantidadBotones: number = 0;
+    private botonesMaximos: number = 10;
+    private textMision: Text;
+    private molino: Sprite;
 
     constructor() {
         super();
@@ -39,10 +46,14 @@ export class Scene_level_1 extends Container implements IScene {
         this.addChild(this.world)
 
         const hex_blocks = Sprite.from("hex_blocks");
-        hex_blocks.position.set(-170, 200);
+        hex_blocks.scale.set(1.5);
+        hex_blocks.position.set(-398, -17);
         this.world.addChild(hex_blocks);
 
-        this.platforms = [];
+        const hex_blocks2 = Sprite.from("hex_blocks");
+        hex_blocks2.scale.set(1.5);
+        hex_blocks2.position.set(2976, -17);
+        this.world.addChild(hex_blocks2);
 
         this.platform1 = new Platform();
         this.platform1.position.set(1900, 300);
@@ -55,41 +66,81 @@ export class Scene_level_1 extends Container implements IScene {
         this.platforms.push(this.platform2);
 
         this.platform3 = new Platform()
-        this.platform3.position.set(500, 400);
+        this.platform3.position.set(600, 400);
         this.platform3.scale.set(0.9);
         this.platforms.push(this.platform3);
+
+        this.platform4 = new Platform()
+        this.platform4.position.set(1099, 464);
+        this.platform4.scale.x = 0.5;
+        this.platform4.visible = false;
+        this.platforms.push(this.platform4);
+
+        this.platform5 = new Platform()
+        this.platform5.position.set(2528, 535);
+        this.platform5.scale.x = 0.9;
+        this.platform5.visible = false;
+        this.platforms.push(this.platform5);
+
+        const domino = Sprite.from("Domino");
+        domino.position.set(2500, 478);
+        this.world.addChild(domino);
+
+        const stick = Sprite.from("Stick");
+        stick.position.set(1834, 257);
+        this.world.addChild(stick);
+
+        this.molino = Sprite.from("Molino");
+        this.molino.anchor.set(0.5);
+        this.molino.position.set(1840, 200);
+        this.world.addChild(this.molino);
 
         this.world.addChild(...this.platforms)
 
         this.playerRobot = new Player_clase12();
-        this.playerRobot.position.set(300, 500);
+        this.playerRobot.position.set(417, 620);
         this.playerRobot.scale.set(0.9);
         this.world.addChild(this.playerRobot);
 
-        this.items = [];
-        let i = 0
-        while (i < 50) {
-            const item1 = new Item();
-            item1.position.set(Math.random() * 2750 + 280, Math.random() * 430 + 180);
-            this.items.push(item1);
-            i++;
-        }
+        this.crearBotones();
 
-        for (let item of this.items) {
-            this.world.addChild(item)
-        }
+
 
         const UI_number_container = Sprite.from("UI_number_container");
-        UI_number_container.x = 1040;
+        UI_number_container.x = 1070;
         this.addChild(UI_number_container);
 
-        this.UI_number = new Text("0", { fontFamily: "Chunq", align: "center", fill: "#ffffff", fontSize: 55, letterSpacing: 5 });
-        this.UI_number.position.set(UI_number_container.x + 113, UI_number_container.y + 93)
+        this.UI_number = new Text("0", { fontFamily: "Chunq", align: "center", fill: "#ffffff", fontSize: 50, letterSpacing: 2 });
+        this.UI_number.position.set(UI_number_container.x + 104, UI_number_container.y + 82)
         this.UI_number.anchor.set(0.5);
         this.addChild(this.UI_number);
 
+        const casitas = Sprite.from("Casitas");
+        casitas.position.set(1088, 430);
+        this.world.addChild(casitas);
 
-        // Movement buttons
+        const button_back = new Button_pino("Salir");
+        button_back.eventMode = "static";
+        button_back.position.set(90, 45);
+        button_back.scale.set(0.9);
+        button_back.on("pointerup", () => { sound.stopAll(); Manager.changeScene(new Scene_title()); })
+        this.addChild(button_back);
+
+
+
+        this.textMision = new Text(`Restantes: ${this.cantidadBotones}`,
+            { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 30 });
+        this.textMision.anchor.set(0.5);
+        this.textMision.position.set(Manager.width / 2, 46);
+        this.addChild(this.textMision)
+
+
+
+
+
+
+
+        // // Movement buttons
         // const buttonLeft = new Button(0xf52261, "Next");
         // buttonLeft.position.set(150, 650);
         // buttonLeft.getChildAt(1).angle = 180
@@ -138,11 +189,10 @@ export class Scene_level_1 extends Container implements IScene {
             .easing(Easing.Elastic.Out)
             .start();
 
-
-
-
-
-
+        new Tween(this.molino)
+            .to({ angle: 360 }, 3000)
+            .start()
+            .repeat(Infinity);
 
         // ****************************
         // Filters
@@ -155,16 +205,8 @@ export class Scene_level_1 extends Container implements IScene {
         // })
         // this.playerRobot.filters = [myGlow]
 
-
-
-
-
-
-
-
-
-
     }
+
 
 
 
@@ -191,24 +233,15 @@ export class Scene_level_1 extends Container implements IScene {
 
         // this.myCRT.time += _deltaFrame;
         // this.myCRT.time %= 20000;
-
         // this.myCRT.seed = Math.random();
-
         // this.particle.update(deltaTime / 1000 * 0.5)
         // this.cartoonSmoke.update(deltaTime / 1000 * 0.5)
-
         this.world.x = -this.playerRobot.x * this.worldTransform.a + Manager.width / 2;
-
-
         // this.background.tileScale.x = this.world.scale.x;
         // this.background.tileScale.y = this.world.scale.y;
         this.background.tilePosition.x = this.world.x * 0.15;
-
-        // this.background.tilePosition.x %= 1280        
-
+        // this.background.tilePosition.x %= 1280       
         this.table.tilePosition.x = this.world.x;
-
-
 
         // Sub-stepping
         if (this.playerRobot.speed.y > 1) {
@@ -236,6 +269,10 @@ export class Scene_level_1 extends Container implements IScene {
             if (checkCollision(this.playerRobot, item) != null) {
                 if (!item.collision) {
                     this.UI_number.text = Number(this.UI_number.text) + 1
+
+                    this.cantidadBotones--;
+                    this.textMision.text = `Restantes: ${this.cantidadBotones}`;
+
 
                     Sound.from({
                         url: `pip${Math.floor(Math.random() * 4) + 1
@@ -276,15 +313,12 @@ export class Scene_level_1 extends Container implements IScene {
             }
         }
 
-
-
-
+        if (this.cantidadBotones < 1) {
+            this.crearBotones();
+            this.textMision.text = `Restantes: ${this.cantidadBotones}`;
+        }
 
     }
-
-
-
-
 
 
 
@@ -328,4 +362,26 @@ export class Scene_level_1 extends Container implements IScene {
                 }
             )
     }
+
+    private crearBotones() {
+        this.items = [];
+        let i = 0
+        while (i < this.botonesMaximos) {
+            const item1 = new Item();
+            item1.position.set(Math.random() * 2750 + 280, Math.random() * 430 + 180);
+            this.items.push(item1);
+            i++;
+            this.cantidadBotones++;
+        }
+
+        for (let item of this.items) {
+            this.world.addChild(item)
+        }
+        this.botonesMaximos += 10;
+    }
+
+
+
+
+
 }

@@ -2,15 +2,16 @@ import { Container, Sprite, Text } from "pixi.js";
 import { IScene } from "../utils/IScene";
 import { Manager } from "../utils/Manager";
 import { Item } from "../game/Item";
+import { sound } from "@pixi/sound";
+import { Button_pino } from "../UI/Button_pino";
 import { Scene_level_1 } from "./Scene_level_1";
-import { Sound } from "@pixi/sound";
 
 export class Scene_title extends Container implements IScene {
 
     constructor() {
         super()
 
-        Sound.from({ url: "pino_song.ogg", singleInstance: true, loop: true, volume: 0.5 }).play();
+        sound.play("pino_song", {singleInstance: true, loop: true, volume: 0.5});
 
         const bg = Sprite.from("bg_molino");
         bg.anchor.set(0.5);
@@ -65,21 +66,12 @@ export class Scene_title extends Container implements IScene {
         text1.position.set(620, 350);
         this.addChild(text1)
 
-        const button_bg = Sprite.from("Button_bg");
-        button_bg.anchor.set(0.5);
-        const text_button = new Text("Jugar", { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 27, align: "center" });
-        text_button.position.set(0, -3);
-        text_button.anchor.set(0.5);
-        const button_play = new Container();
-        button_play.addChild(button_bg, text_button);
-        button_play.position.set(740, 520);
-        button_play.eventMode = "static";
-        button_play.cursor = "pointer";
-        button_play.on("pointerover", () => { button_play.scale.set(1.1) })
-        button_play.on("pointerout", () => { button_play.scale.set(1) })
-        button_play.on("pointerup", () => { Manager.changeScene(new Scene_level_1()) })
-        
-        this.addChild(button_play);
+
+        const buttonJugar = new Button_pino("Jugar")
+        buttonJugar.position.set(740, 520);
+        buttonJugar.eventMode = "static";
+        buttonJugar.on("pointerup", () => { Manager.changeScene(new Scene_level_1()) });
+        this.addChild(buttonJugar);
 
 
         const text2 = new Text(
