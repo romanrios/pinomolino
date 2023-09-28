@@ -1,4 +1,4 @@
-# Pino en el Molino 🔘
+# Pino en el Molino 🕹️
 Videojuego web de plataformas ambientado en El Molino Fábrica Cultural de Santa Fe, protagonizado por un muñequito de madera.
 
 Diseño, desarrollo y música: Román Ríos
