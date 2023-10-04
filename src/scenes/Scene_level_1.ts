@@ -319,7 +319,7 @@ export class Scene_level_1 extends Container implements IScene {
                 this.world.removeChild(item)
                 item.destroy;
                 if (this.botonesJuntados.text == "200") {
-                    alert("NIVEL COMPLETADO")
+                    // alert("NIVEL COMPLETADO")
                 }
 
 

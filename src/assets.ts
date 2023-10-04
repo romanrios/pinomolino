@@ -13,7 +13,7 @@ export const manifest: ResolverManifest = {
                 Particle: "particle.png",
                 CartoonSmoke: "cartoonSmoke.png",
                 wood_character: "wood_character.json",
-                bg_molino: "bg_molino.png",
+                bg_molino: "bg_molino.jpg",
                 table: "table.png",
                 hex_blocks: "hex_blocks.png",
                 botones: "botones.json",
