@@ -4,7 +4,7 @@ import { Keyboard } from "../utils/Keyboard";
 import { IHitbox } from "./IHitbox";
 import { StateAnimation } from "./StateAnimation";
 
-export class Player_clase12 extends PhysicsContainer implements IHitbox {
+export class Player_Pino extends PhysicsContainer implements IHitbox {
 
 
     private static readonly GRAVITY = 3000;
@@ -50,7 +50,7 @@ export class Player_clase12 extends PhysicsContainer implements IHitbox {
         this.addChild(this.robotAnimated);
         this.addChild(this.hitbox);
 
-        this.acceleration.y = Player_clase12.GRAVITY;
+        this.acceleration.y = Player_Pino.GRAVITY;
 
         Keyboard.down.on("ArrowUp", this.jump, this)
 
@@ -77,10 +77,10 @@ export class Player_clase12 extends PhysicsContainer implements IHitbox {
         //this.robotAnimated.update(deltaMS / (1000 / 60), 0)
 
         if (Keyboard.state.get("ArrowRight")) {
-            this.speed.x = Player_clase12.MOVE_SPEED;
+            this.speed.x = Player_Pino.MOVE_SPEED;
             this.robotAnimated.scale.x = 1
         } else if (Keyboard.state.get("ArrowLeft")) {
-            this.speed.x = -Player_clase12.MOVE_SPEED;
+            this.speed.x = -Player_Pino.MOVE_SPEED;
             this.robotAnimated.scale.x = -1;
 
         }
@@ -100,7 +100,7 @@ export class Player_clase12 extends PhysicsContainer implements IHitbox {
     jump() {
         if (this.canJump) {
             this.canJump = false;
-            this.speed.y = -Player_clase12.JUMP;
+            this.speed.y = -Player_Pino.JUMP;
             this.robotAnimated.playState("jump", false);
         }
     }

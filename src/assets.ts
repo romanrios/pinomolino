@@ -30,8 +30,9 @@ export const manifest: ResolverManifest = {
                 Casitas: "casitas.png",
                 Domino: "domino.png",
                 Molino: "molino.png",
-                Stick: "stick.png"
-
+                Stick: "stick.png",
+                BlackScreen: "blackscreen.svg",
+                Circle: "circle.svg"
             }
         }
     ]

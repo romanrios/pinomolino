@@ -1,17 +1,18 @@
-import { Container, Sprite, Text } from "pixi.js";
+import { Container, Graphics, Sprite, Text } from "pixi.js";
 import { IScene } from "../utils/IScene";
 import { Manager } from "../utils/Manager";
 import { Item } from "../game/Item";
 import { sound } from "@pixi/sound";
 import { Button_pino } from "../UI/Button_pino";
 import { Scene_level_1 } from "./Scene_level_1";
+import { Easing, Tween } from "tweedle.js";
 
 export class Scene_title extends Container implements IScene {
 
     constructor() {
         super()
 
-        sound.play("pino_song", {singleInstance: true, loop: true, volume: 0.5});
+        sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
 
         const bg = Sprite.from("bg_molino");
         bg.anchor.set(0.5);
@@ -66,11 +67,29 @@ export class Scene_title extends Container implements IScene {
         text1.position.set(620, 350);
         this.addChild(text1)
 
-
         const buttonJugar = new Button_pino("Jugar")
         buttonJugar.position.set(740, 520);
         buttonJugar.eventMode = "static";
-        buttonJugar.on("pointerup", () => { Manager.changeScene(new Scene_level_1()) });
+        buttonJugar.on("pointerup", () => {
+
+            const circlemask = new Graphics();
+            circlemask.position.set(Manager.width / 2, Manager.height / 2);
+            circlemask.beginFill(0x994466);
+            circlemask.drawCircle(0, 0, 150);
+            circlemask.scale.set(10);
+            this.addChild(circlemask);
+
+            this.mask = circlemask;
+
+            new Tween(circlemask)
+                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
+                .easing(Easing.Quintic.Out)
+                .start()
+                .onComplete(() => { Manager.changeScene(new Scene_level_1()) })
+        });
+
+
+
         this.addChild(buttonJugar);
 
 
@@ -82,7 +101,20 @@ export class Scene_title extends Container implements IScene {
         this.addChild(text2)
 
 
+                const circlemask = new Graphics();
+        circlemask.position.set(Manager.width / 2, Manager.height / 2);
+        circlemask.beginFill(0xFFFFFF);
+        circlemask.drawCircle(0, 0, 150);
+        circlemask.scale.set(0.05);
+        this.addChild(circlemask);
 
+        this.mask = circlemask;
+        
+        new Tween(circlemask)
+            .to({ scale: { x: 10, y: 10 } }, 600)
+            .easing(Easing.Quintic.In)
+            .start()
+            .onComplete(() => { this.removeChild(circlemask); circlemask.destroy })
 
 
     }

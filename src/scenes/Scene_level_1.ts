@@ -1,7 +1,7 @@
-import { Container, Sprite, Text, Texture, TilingSprite } from "pixi.js";
+import { Container, Graphics, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import { IScene } from "../utils/IScene";
 import { Manager } from "../utils/Manager";
-import { Player_clase12 } from "../game/Player";
+import { Player_Pino } from "../game/Player_Pino";
 import { Platform } from "../game/Platform";
 import { checkCollision } from "../game/IHitbox";
 import { Easing, Tween } from "tweedle.js";
@@ -13,7 +13,7 @@ import { Scene_title } from "./Scene_title";
 
 export class Scene_level_1 extends Container implements IScene {
 
-    private playerRobot: Player_clase12;
+    private playerRobot: Player_Pino;
     private platforms: Platform[] = [];
     private platform1: Platform;
     private platform2: Platform;
@@ -22,7 +22,7 @@ export class Scene_level_1 extends Container implements IScene {
     private background: TilingSprite;
     private table: TilingSprite;
     private items: Item[] = [];
-    private UI_number: Text;
+    private botonesJuntados: Text;
     private platform4: Platform;
     private platform5: Platform;
     private cantidadBotones: number = 0;
@@ -97,7 +97,7 @@ export class Scene_level_1 extends Container implements IScene {
 
         this.world.addChild(...this.platforms)
 
-        this.playerRobot = new Player_clase12();
+        this.playerRobot = new Player_Pino();
         this.playerRobot.position.set(417, 620);
         this.playerRobot.scale.set(0.9);
         this.world.addChild(this.playerRobot);
@@ -110,10 +110,10 @@ export class Scene_level_1 extends Container implements IScene {
         UI_number_container.x = 1070;
         this.addChild(UI_number_container);
 
-        this.UI_number = new Text("0", { fontFamily: "Chunq", align: "center", fill: "#ffffff", fontSize: 50, letterSpacing: 2 });
-        this.UI_number.position.set(UI_number_container.x + 104, UI_number_container.y + 82)
-        this.UI_number.anchor.set(0.5);
-        this.addChild(this.UI_number);
+        this.botonesJuntados = new Text("0", { fontFamily: "Chunq", align: "center", fill: "#ffffff", fontSize: 50, letterSpacing: 2 });
+        this.botonesJuntados.position.set(UI_number_container.x + 104, UI_number_container.y + 82)
+        this.botonesJuntados.anchor.set(0.5);
+        this.addChild(this.botonesJuntados);
 
         const casitas = Sprite.from("Casitas");
         casitas.position.set(1088, 430);
@@ -123,7 +123,23 @@ export class Scene_level_1 extends Container implements IScene {
         button_back.eventMode = "static";
         button_back.position.set(90, 45);
         button_back.scale.set(0.9);
-        button_back.on("pointerup", () => { sound.stopAll(); Manager.changeScene(new Scene_title()); })
+        button_back.on("pointerup", () => {
+
+            const circlemask = new Graphics();
+            circlemask.position.set(Manager.width / 2, Manager.height / 2);
+            circlemask.beginFill(0x994466);
+            circlemask.drawCircle(0, 0, 150);
+            circlemask.scale.set(10);
+            this.addChild(circlemask);
+
+            this.mask = circlemask;
+
+            new Tween(circlemask)
+                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
+                .easing(Easing.Quintic.Out)
+                .start()
+                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title()) })
+        })
         this.addChild(button_back);
 
 
@@ -134,6 +150,21 @@ export class Scene_level_1 extends Container implements IScene {
         this.textMision.position.set(Manager.width / 2, 46);
         this.addChild(this.textMision)
 
+
+        const circlemask = new Graphics();
+        circlemask.position.set(Manager.width / 2, Manager.height / 2);
+        circlemask.beginFill(0xFFFFFF);
+        circlemask.drawCircle(0, 0, 150);
+        circlemask.scale.set(0.05);
+        this.addChild(circlemask);
+
+        this.mask = circlemask;
+
+        new Tween(circlemask)
+            .to({ scale: { x: 10, y: 10 } }, 600)
+            .easing(Easing.Quintic.In)
+            .start()
+            .onComplete(() => { this.removeChild(circlemask); circlemask.destroy })
 
 
 
@@ -268,21 +299,30 @@ export class Scene_level_1 extends Container implements IScene {
         for (let item of this.items) {
             if (checkCollision(this.playerRobot, item) != null) {
                 if (!item.collision) {
-                    this.UI_number.text = Number(this.UI_number.text) + 1
+                    this.botonesJuntados.text = Number(this.botonesJuntados.text) + 1
+
 
                     this.cantidadBotones--;
                     this.textMision.text = `Restantes: ${this.cantidadBotones}`;
 
-
                     Sound.from({
                         url: `pip${Math.floor(Math.random() * 4) + 1
-                            }.ogg`, singleInstance: false
+                            }.ogg`, singleInstance: true
                     }).play();
-
                 }
+
+                if (Number(this.botonesJuntados.text) > 999) {
+                    this.botonesJuntados.scale.set(0.72);
+                }
+
                 item.collision = true;
                 this.world.removeChild(item)
                 item.destroy;
+                if (this.botonesJuntados.text == "200") {
+                    alert("NIVEL COMPLETADO")
+                }
+
+
             }
 
         }
