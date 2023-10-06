@@ -35,12 +35,14 @@ export class Scene_level_1 extends Container implements IScene {
     private timerText: Text;
     private clocks: ItemClock[] = [];
     private clockIcon: Sprite;
-    private finished: boolean = false;
+    private gameState: string = "none";
     private button_back: Button_pino;
     private UI_number_container: Sprite;
 
     constructor() {
         super();
+
+        sound.stopAll();
 
         this.background = new TilingSprite(Texture.from("bg_molino"), Manager.width, Manager.height);
         this.background.scale.set(1.5);
@@ -111,10 +113,6 @@ export class Scene_level_1 extends Container implements IScene {
         this.playerRobot.scale.set(0.9);
         this.world.addChild(this.playerRobot);
 
-        this.crearBotones();
-
-
-
         this.UI_number_container = Sprite.from("UI_number_container");
         this.UI_number_container.x = 1070;
         this.addChild(this.UI_number_container);
@@ -169,16 +167,15 @@ export class Scene_level_1 extends Container implements IScene {
         this.clockIcon = Sprite.from("Clock");
         this.clockIcon.anchor.set(0.5);
         this.clockIcon.scale.set(0.4);
-        this.clockIcon.position.set(Manager.width / 2 - 100, 70)
+        this.clockIcon.position.set(Manager.width / 2 - 107, 70)
+        this.clockIcon.visible = false;
         this.addChild(this.clockIcon);
 
-        this.timerText = new Text(String(this.secondsToMinutes(this.timerNumber)), { fontFamily: "Montserrat Bold", align: "center", fill: "#ffffff", fontSize: 60, letterSpacing: 2 })
+        this.timerText = new Text("4", { fontFamily: "Montserrat Bold", align: "center", fill: "#ffffff", fontSize: 60, letterSpacing: 2 })
         this.timerText.anchor.set(0.5);
-        this.timerText.position.set(Manager.width / 2 + 25, 70);
+        this.timerText.position.set(Manager.width / 2 + 12, 70);
+        this.timerText.visible = false;
         this.addChild(this.timerText);
-
-
-
 
 
         // // Movement buttons
@@ -235,17 +232,6 @@ export class Scene_level_1 extends Container implements IScene {
             .start()
             .repeat(Infinity);
 
-        // ****************************
-        // Filters
-        // ****************************
-
-        // const myGlow = new GlowFilter({
-        //     //color: 0xFFFFFF,
-        //     //distance: 20,
-        //     alpha: 0.8
-        // })
-        // this.playerRobot.filters = [myGlow]
-
     }
 
 
@@ -258,41 +244,51 @@ export class Scene_level_1 extends Container implements IScene {
         this.timerCounter += deltaTime;
 
         if (this.timerCounter > 999) {
-            this.timerNumber -= 1;
-            this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
+
+            if (this.gameState == "started") {
+                this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
+                this.timerNumber -= 1;
+            } else if (this.gameState == "none") {
+                this.timerText.visible = true;
+                this.timerText.text = String(Number(this.timerText.text) - 1);
+                if (this.timerText.text != "0") {
+                    sound.play("Beep", { volume: 0.4 });
+                }
+                if (this.timerText.text == "0") {
+                    this.gameState = "started"
+                    sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
+                    this.clockIcon.visible = true;
+                }
+            }
+
+
             this.timerCounter = 0;
 
             if (this.timerNumber <= 3 && this.timerNumber >= 0) {
                 sound.play("Beep", { volume: 0.4 });
             }
-
-
         }
 
-        if (this.timerNumber < 0) {
 
-            if (this.finished == false) {
-                this.finished = true
+        if (this.timerNumber < 0) {
+            if (this.gameState != "finished") {
+                this.gameState = "finished"
                 this.removeChild(this.timerText);
                 this.removeChild(this.clockIcon)
                 this.removeChild(this.button_back)
                 this.removeChild(this.UI_number_container);
                 this.removeChild(this.score);
-
                 sound.stopAll()
                 sound.play("pinosong_finished", { singleInstance: true, loop: false, volume: 0.6 });
-
                 const completed = new Completed_UI(this.score.text);
                 this.addChild(completed);
             }
         }
 
         this.world.x = -this.playerRobot.x * this.worldTransform.a + Manager.width / 2;
-
         this.background.tilePosition.x = this.world.x * 0.15;
         this.background.tilePosition.x %= Manager.width;
         this.table.tilePosition.x = this.world.x;
-
 
         // Sub-stepping
         if (this.playerRobot.speed.y > 1000) {
@@ -317,12 +313,10 @@ export class Scene_level_1 extends Container implements IScene {
         }
 
         for (let item of this.items) {
-            if (checkCollision(this.playerRobot, item) != null && !this.finished) {
+            if (checkCollision(this.playerRobot, item) != null && this.gameState != "finished") {
                 if (!item.collision) {
                     this.score.text = Number(this.score.text) + 1
-
                     this.cantidadBotones--;
-
                     Sound.from({
                         url: `pip${Math.floor(Math.random() * 4) + 1
                             }.ogg`, singleInstance: true
@@ -331,7 +325,6 @@ export class Scene_level_1 extends Container implements IScene {
                     if (Number(this.score.text) > 999) {
                         this.score.scale.set(0.72);
                     }
-
                     item.collision = true;
                     this.world.removeChild(item)
                     if (this.score.text == "200") {
@@ -340,28 +333,19 @@ export class Scene_level_1 extends Container implements IScene {
             }
         }
 
-
-
         for (let i of this.clocks) {
-            if (checkCollision(this.playerRobot, i) != null && !this.finished) {
+            if (checkCollision(this.playerRobot, i) != null && this.gameState != "finished") {
                 if (!i.collision) {
-
                     this.timerNumber += 10;
                     this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
-
                     Sound.from({
                         url: "clock.ogg", singleInstance: true, volume: 0.4
                     }).play();
                 }
-
                 i.collision = true;
                 this.world.removeChild(i)
-
             }
         }
-
-
-
 
         // limit horizontal
         if (this.playerRobot.x > 3000) {
@@ -371,7 +355,6 @@ export class Scene_level_1 extends Container implements IScene {
             // limit left
             this.playerRobot.x = 312;
         }
-
         // limit vertical
         if (this.playerRobot.y > Manager.height - 100) {
             // if (this.playerRobot.canJump == false && this.particle.emit == true) {
@@ -388,12 +371,13 @@ export class Scene_level_1 extends Container implements IScene {
             }
         }
 
-        if (this.cantidadBotones < 1) {
+        if (this.cantidadBotones < 1 && this.gameState == "started") {
             this.crearBotones();
             this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
         }
 
     }
+    // **** UPDATE END ****
 
 
 
@@ -439,6 +423,7 @@ export class Scene_level_1 extends Container implements IScene {
             )
     }
 
+
     private crearBotones() {
         this.items = [];
         let i = 0
@@ -460,8 +445,8 @@ export class Scene_level_1 extends Container implements IScene {
         clock.position.set(Math.random() * 2750 + 280, Math.random() * 430 + 180);
         this.clocks.push(clock);
         this.world.addChild(clock);
-
     }
+
 
     private secondsToMinutes(segundos: number): string {
         const minutos: number = Math.floor(segundos / 60);
@@ -473,9 +458,5 @@ export class Scene_level_1 extends Container implements IScene {
 
         return `${minutosFormateados}:${segundosFormateados}`;
     }
-
-
-
-
 
 }

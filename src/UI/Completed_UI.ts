@@ -4,8 +4,6 @@ import { Button_pino } from "./Button_pino";
 import { ItemClock } from "../game/ItemClock";
 import { Scene_title } from "../scenes/Scene_title";
 import { Scene_level_1 } from "../scenes/Scene_level_1";
-import { sound } from "@pixi/sound";
-
 
 export class Completed_UI extends Container {
 
@@ -40,7 +38,6 @@ export class Completed_UI extends Container {
         button_play.eventMode="static";
         button_play.on("pointerup",()=>{
             Manager.changeScene(new Scene_level_1());
-            sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
         })
         this.addChild(button_play);
 

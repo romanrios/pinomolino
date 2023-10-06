@@ -1,9 +1,10 @@
 import { Container, Sprite, Text } from "pixi.js";
-
+import { Sound } from "@pixi/sound";
 
 export class Button_pino extends Container {
     constructor(text: string, sprite: string) {
         super()
+
 
         const button_bg = Sprite.from(sprite);
         button_bg.anchor.set(0.5);
@@ -16,6 +17,14 @@ export class Button_pino extends Container {
         button_play.cursor = "pointer";
         button_play.on("pointerover", () => { button_play.scale.set(1.1) })
         button_play.on("pointerout", () => { button_play.scale.set(1) })
+        button_play.on("pointerup", () => { 
+            
+            Sound.from({
+                url: "whoosh.ogg", singleInstance: true, volume: 0.5
+            }).play();
+
+         })
+
         this.addChild(button_play);
     }
 }

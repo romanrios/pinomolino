@@ -37,7 +37,8 @@ export const manifest: ResolverManifest = {
                 completed_ui_bg: "completed_ui_bg.svg",
                 pinosong_finished: "pinosong_finished.ogg",
                 clocksound: "clock.ogg",
-                Beep: "beep.ogg"
+                Beep: "beep.ogg",
+                whoosh: "whoosh.ogg"
             }
         }
     ]
