@@ -2,10 +2,10 @@ import { Container, Sprite, Text } from "pixi.js";
 
 
 export class Button_pino extends Container {
-    constructor(text: string) {
+    constructor(text: string, sprite: string) {
         super()
 
-        const button_bg = Sprite.from("Button_bg");
+        const button_bg = Sprite.from(sprite);
         button_bg.anchor.set(0.5);
         const text_button = new Text(text, { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 27, align: "center" });
         text_button.position.set(0, -3);

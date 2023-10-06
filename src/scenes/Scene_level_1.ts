@@ -9,6 +9,8 @@ import { Item } from "../game/Item";
 import { Sound, sound } from "@pixi/sound";
 import { Button_pino } from "../UI/Button_pino";
 import { Scene_title } from "./Scene_title";
+import { ItemClock } from "../game/ItemClock";
+import { Completed_UI } from "../UI/Completed_UI";
 
 
 export class Scene_level_1 extends Container implements IScene {
@@ -22,13 +24,20 @@ export class Scene_level_1 extends Container implements IScene {
     private background: TilingSprite;
     private table: TilingSprite;
     private items: Item[] = [];
-    private botonesJuntados: Text;
+    private score: Text;
     private platform4: Platform;
     private platform5: Platform;
     private cantidadBotones: number = 0;
     private botonesMaximos: number = 10;
-    private textMision: Text;
     private molino: Sprite;
+    private timerCounter: number = 0
+    private timerNumber: number = 30;
+    private timerText: Text;
+    private clocks: ItemClock[] = [];
+    private clockIcon: Sprite;
+    private finished: boolean = false;
+    private button_back: Button_pino;
+    private UI_number_container: Sprite;
 
     constructor() {
         super();
@@ -106,24 +115,24 @@ export class Scene_level_1 extends Container implements IScene {
 
 
 
-        const UI_number_container = Sprite.from("UI_number_container");
-        UI_number_container.x = 1070;
-        this.addChild(UI_number_container);
+        this.UI_number_container = Sprite.from("UI_number_container");
+        this.UI_number_container.x = 1070;
+        this.addChild(this.UI_number_container);
 
-        this.botonesJuntados = new Text("0", { fontFamily: "Chunq", align: "center", fill: "#ffffff", fontSize: 50, letterSpacing: 2 });
-        this.botonesJuntados.position.set(UI_number_container.x + 104, UI_number_container.y + 82)
-        this.botonesJuntados.anchor.set(0.5);
-        this.addChild(this.botonesJuntados);
+        this.score = new Text("0", { fontFamily: "Chunq", align: "center", fill: "#ffffff", fontSize: 50, letterSpacing: 2 });
+        this.score.position.set(this.UI_number_container.x + 104, this.UI_number_container.y + 82)
+        this.score.anchor.set(0.5);
+        this.addChild(this.score);
 
         const casitas = Sprite.from("Casitas");
         casitas.position.set(1088, 430);
         this.world.addChild(casitas);
 
-        const button_back = new Button_pino("Salir");
-        button_back.eventMode = "static";
-        button_back.position.set(90, 45);
-        button_back.scale.set(0.9);
-        button_back.on("pointerup", () => {
+        this.button_back = new Button_pino("Salir", "Button_bg");
+        this.button_back.eventMode = "static";
+        this.button_back.position.set(90, 45);
+        this.button_back.scale.set(0.9);
+        this.button_back.on("pointerup", () => {
 
             const circlemask = new Graphics();
             circlemask.position.set(Manager.width / 2, Manager.height / 2);
@@ -140,16 +149,7 @@ export class Scene_level_1 extends Container implements IScene {
                 .start()
                 .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title()) })
         })
-        this.addChild(button_back);
-
-
-
-        this.textMision = new Text(`Restantes: ${this.cantidadBotones}`,
-            { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 30 });
-        this.textMision.anchor.set(0.5);
-        this.textMision.position.set(Manager.width / 2, 46);
-        this.addChild(this.textMision)
-
+        this.addChild(this.button_back);
 
         const circlemask = new Graphics();
         circlemask.position.set(Manager.width / 2, Manager.height / 2);
@@ -164,8 +164,18 @@ export class Scene_level_1 extends Container implements IScene {
             .to({ scale: { x: 10, y: 10 } }, 600)
             .easing(Easing.Quintic.In)
             .start()
-            .onComplete(() => { this.removeChild(circlemask); circlemask.destroy })
+            .onComplete(() => { this.removeChild(circlemask); })
 
+        this.clockIcon = Sprite.from("Clock");
+        this.clockIcon.anchor.set(0.5);
+        this.clockIcon.scale.set(0.4);
+        this.clockIcon.position.set(Manager.width / 2 - 100, 70)
+        this.addChild(this.clockIcon);
+
+        this.timerText = new Text(String(this.secondsToMinutes(this.timerNumber)), { fontFamily: "Montserrat Bold", align: "center", fill: "#ffffff", fontSize: 60, letterSpacing: 2 })
+        this.timerText.anchor.set(0.5);
+        this.timerText.position.set(Manager.width / 2 + 25, 70);
+        this.addChild(this.timerText);
 
 
 
@@ -243,39 +253,49 @@ export class Scene_level_1 extends Container implements IScene {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public update(deltaTime: number, _deltaFrame: number) {
 
-        // this.myCRT.time += _deltaFrame;
-        // this.myCRT.time %= 20000;
-        // this.myCRT.seed = Math.random();
-        // this.particle.update(deltaTime / 1000 * 0.5)
-        // this.cartoonSmoke.update(deltaTime / 1000 * 0.5)
+        this.timerCounter += deltaTime;
+
+        if (this.timerCounter > 999) {
+            this.timerNumber -= 1;
+            this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
+            this.timerCounter = 0;
+
+            if (this.timerNumber <= 3 && this.timerNumber >= 0) {
+                sound.play("Beep", { volume: 0.4 });
+            }
+
+
+        }
+
+        if (this.timerNumber < 0) {
+
+            if (this.finished == false) {
+                this.finished = true
+                this.removeChild(this.timerText);
+                this.removeChild(this.clockIcon)
+                this.removeChild(this.button_back)
+                this.removeChild(this.UI_number_container);
+                this.removeChild(this.score);
+
+                sound.stopAll()
+                sound.play("pinosong_finished", { singleInstance: true, loop: false, volume: 0.6 });
+
+                const completed = new Completed_UI(this.score.text);
+                this.addChild(completed);
+            }
+        }
+
         this.world.x = -this.playerRobot.x * this.worldTransform.a + Manager.width / 2;
-        // this.background.tileScale.x = this.world.scale.x;
-        // this.background.tileScale.y = this.world.scale.y;
+
         this.background.tilePosition.x = this.world.x * 0.15;
-        // this.background.tilePosition.x %= 1280       
+        this.background.tilePosition.x %= Manager.width;
         this.table.tilePosition.x = this.world.x;
 
+
         // Sub-stepping
-        if (this.playerRobot.speed.y > 1) {
+        if (this.playerRobot.speed.y > 1000) {
             while (deltaTime > 1) {
                 deltaTime -= 1;
                 this.playerRobot.update(1);
@@ -297,35 +317,50 @@ export class Scene_level_1 extends Container implements IScene {
         }
 
         for (let item of this.items) {
-            if (checkCollision(this.playerRobot, item) != null) {
+            if (checkCollision(this.playerRobot, item) != null && !this.finished) {
                 if (!item.collision) {
-                    this.botonesJuntados.text = Number(this.botonesJuntados.text) + 1
-
+                    this.score.text = Number(this.score.text) + 1
 
                     this.cantidadBotones--;
-                    this.textMision.text = `Restantes: ${this.cantidadBotones}`;
 
                     Sound.from({
                         url: `pip${Math.floor(Math.random() * 4) + 1
                             }.ogg`, singleInstance: true
                     }).play();
+
+                    if (Number(this.score.text) > 999) {
+                        this.score.scale.set(0.72);
+                    }
+
+                    item.collision = true;
+                    this.world.removeChild(item)
+                    if (this.score.text == "200") {
+                    }
+                }
+            }
+        }
+
+
+
+        for (let i of this.clocks) {
+            if (checkCollision(this.playerRobot, i) != null && !this.finished) {
+                if (!i.collision) {
+
+                    this.timerNumber += 10;
+                    this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
+
+                    Sound.from({
+                        url: "clock.ogg", singleInstance: true, volume: 0.4
+                    }).play();
                 }
 
-                if (Number(this.botonesJuntados.text) > 999) {
-                    this.botonesJuntados.scale.set(0.72);
-                }
-
-                item.collision = true;
-                this.world.removeChild(item)
-                item.destroy;
-                if (this.botonesJuntados.text == "200") {
-                    // alert("NIVEL COMPLETADO")
-                }
-
+                i.collision = true;
+                this.world.removeChild(i)
 
             }
-
         }
+
+
 
 
         // limit horizontal
@@ -355,10 +390,11 @@ export class Scene_level_1 extends Container implements IScene {
 
         if (this.cantidadBotones < 1) {
             this.crearBotones();
-            this.textMision.text = `Restantes: ${this.cantidadBotones}`;
+            this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
         }
 
     }
+
 
 
 
@@ -417,7 +453,25 @@ export class Scene_level_1 extends Container implements IScene {
         for (let item of this.items) {
             this.world.addChild(item)
         }
+
         this.botonesMaximos += 10;
+
+        const clock = new ItemClock();
+        clock.position.set(Math.random() * 2750 + 280, Math.random() * 430 + 180);
+        this.clocks.push(clock);
+        this.world.addChild(clock);
+
+    }
+
+    private secondsToMinutes(segundos: number): string {
+        const minutos: number = Math.floor(segundos / 60);
+        const segundosRestantes: number = segundos % 60;
+
+        // Asegurarse de que tanto los minutos como los segundos tengan dos dígitos
+        const minutosFormateados: string = minutos < 10 ? `0${minutos}` : minutos.toString();
+        const segundosFormateados: string = segundosRestantes < 10 ? `0${segundosRestantes}` : segundosRestantes.toString();
+
+        return `${minutosFormateados}:${segundosFormateados}`;
     }
 
 

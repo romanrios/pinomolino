@@ -27,12 +27,17 @@ export const manifest: ResolverManifest = {
                 title: "title.png",
                 Montserrat: "Montserrat-Bold.ttf",
                 Button_bg: "button_bg.png",
+                Button_bg2: "button_bg2.png",
                 Casitas: "casitas.png",
                 Domino: "domino.png",
                 Molino: "molino.png",
                 Stick: "stick.png",
-                BlackScreen: "blackscreen.svg",
-                Circle: "circle.svg"
+                Clock: "clock.svg",
+                ClockColor: "clock_color.png",
+                completed_ui_bg: "completed_ui_bg.svg",
+                pinosong_finished: "pinosong_finished.ogg",
+                clocksound: "clock.ogg",
+                Beep: "beep.ogg"
             }
         }
     ]

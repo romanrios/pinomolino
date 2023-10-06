@@ -67,7 +67,7 @@ export class Scene_title extends Container implements IScene {
         text1.position.set(620, 350);
         this.addChild(text1)
 
-        const buttonJugar = new Button_pino("Jugar")
+        const buttonJugar = new Button_pino("Jugar","Button_bg")
         buttonJugar.position.set(740, 520);
         buttonJugar.eventMode = "static";
         buttonJugar.on("pointerup", () => {
@@ -88,10 +88,7 @@ export class Scene_title extends Container implements IScene {
                 .onComplete(() => { Manager.changeScene(new Scene_level_1()) })
         });
 
-
-
         this.addChild(buttonJugar);
-
 
         const text2 = new Text(
             "© 2023 Román Ríos\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
@@ -100,8 +97,7 @@ export class Scene_title extends Container implements IScene {
         text2.position.set(Manager.width / 2, 605);
         this.addChild(text2)
 
-
-                const circlemask = new Graphics();
+        const circlemask = new Graphics();
         circlemask.position.set(Manager.width / 2, Manager.height / 2);
         circlemask.beginFill(0xFFFFFF);
         circlemask.drawCircle(0, 0, 150);
@@ -109,17 +105,13 @@ export class Scene_title extends Container implements IScene {
         this.addChild(circlemask);
 
         this.mask = circlemask;
-        
+
         new Tween(circlemask)
             .to({ scale: { x: 10, y: 10 } }, 600)
             .easing(Easing.Quintic.In)
             .start()
-            .onComplete(() => { this.removeChild(circlemask); circlemask.destroy })
-
-
+            .onComplete(() => { this.removeChild(circlemask) })
     }
-
-
 
     update(_deltaTime: number, _deltaFrame: number): void {
         // throw new Error("Method not implemented.");
