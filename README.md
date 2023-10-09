@@ -11,16 +11,15 @@ https://romanrios.github.io/pinomolino/
 
 ## Screenshots
 
-![screenshot1](https://github.com/romanrios/pinomolino/assets/122373737/5542e194-b757-4e43-85a4-48671225d7b0)
+![screenshot01](https://github.com/romanrios/pinomolino/assets/122373737/eb2f1b98-2647-43fc-9997-a73dfe82d073)
 
-![screenshot8](https://github.com/romanrios/pinomolino/assets/122373737/c26607e0-aa72-4bb1-82de-83c59bcfbfc3)
+![screenshot02](https://github.com/romanrios/pinomolino/assets/122373737/3630e451-e9f4-498d-88fc-65af31b7baa2)
 
-![screenshot7](https://github.com/romanrios/pinomolino/assets/122373737/06138347-fc9c-4bc6-9f21-e05c316755f5)
+![screenshot03](https://github.com/romanrios/pinomolino/assets/122373737/d5157bdf-aa68-4a47-a794-433dcfaa4a3a)
 
-![screenshot4](https://github.com/romanrios/pinomolino/assets/122373737/0a5a083f-5688-481b-b38f-3e40b4ca26ba)
+![screenshot04](https://github.com/romanrios/pinomolino/assets/122373737/43182172-469b-4b58-97b7-9cca444e8c69)
 
-![screenshot2](https://github.com/romanrios/pinomolino/assets/122373737/69e442ae-ae51-44d5-980d-02e62a6e70d9)
-
+![screenshot05](https://github.com/romanrios/pinomolino/assets/122373737/b5f72490-e0c8-431f-9741-677b7561265e)
 
 ## Link a otra propuesta
 https://github.com/romanrios/rockquiz
