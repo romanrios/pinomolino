@@ -11,7 +11,7 @@ import { ButtonCircle } from "../UI/ButtonCircle";
 
 export class Scene_title extends Container implements IScene {
 
-    constructor() {
+    constructor(title_or_highscore: string) {
         super()
 
         sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
@@ -105,7 +105,7 @@ export class Scene_title extends Container implements IScene {
         const black_alpha = new Graphics();
         black_alpha.beginFill(0x000000);
         black_alpha.drawRect(0, 0, Manager.width, Manager.height);
-        black_alpha.alpha = 0.5;
+        black_alpha.alpha = 0.4;
         black_alpha.visible = false;
         this.addChild(black_alpha);
 
@@ -118,15 +118,21 @@ export class Scene_title extends Container implements IScene {
         button_back.eventMode = "static";
         button_back.position.set(1195, 68);
         button_back.scale.set(1.2);
-        button_back.visible=false;
+        button_back.visible = false;
         button_back.on("pointerup", () => {
             highScore.visible = false;
             black_alpha.visible = false;
             container.visible = true;
-            button_back.visible=false;
+            button_back.visible = false;
         })
         this.addChild(button_back);
 
+        if (title_or_highscore == "highscore") {
+            highScore.visible = true;
+            container.visible = false;
+            button_back.visible=true;
+            black_alpha.visible = true;
+        }
 
         const button_ranking = new ButtonCircle("button_ranking.png");
         button_ranking.position.set(1195, 90);
@@ -135,18 +141,18 @@ export class Scene_title extends Container implements IScene {
             highScore.visible = true;
             black_alpha.visible = true;
             container.visible = false;
-            button_back.visible=true;
+            button_back.visible = true;
         })
         container.addChild(button_ranking);
 
         const button_speaker = new ButtonCircle("button_speaker.svg");
         button_speaker.scale.set(0.8);
         button_speaker.position.set(960, 60);
-        button_speaker.eventMode="static";
-        button_speaker.on("pointerup",()=>{
+        button_speaker.eventMode = "static";
+        button_speaker.on("pointerup", () => {
             sound.muteAll();
-            button_speaker.visible=false;
-            button_speaker_off.visible=true;
+            button_speaker.visible = false;
+            button_speaker_off.visible = true;
 
         })
         container.addChild(button_speaker);
@@ -154,12 +160,12 @@ export class Scene_title extends Container implements IScene {
         const button_speaker_off = new ButtonCircle("button_speaker_off.svg");
         button_speaker_off.scale.set(0.8);
         button_speaker_off.position.set(960, 60);
-        button_speaker_off.eventMode="static";
-        button_speaker_off.visible=false;
-        button_speaker_off.on("pointerup",()=>{
+        button_speaker_off.eventMode = "static";
+        button_speaker_off.visible = false;
+        button_speaker_off.on("pointerup", () => {
             sound.unmuteAll();
-            button_speaker.visible=true;
-            button_speaker_off.visible=false;
+            button_speaker.visible = true;
+            button_speaker_off.visible = false;
         })
         container.addChild(button_speaker_off);
 

@@ -63,7 +63,7 @@ export class LoaderScene extends Container implements IScene {
 
     private gameLoaded(): void {
         // Change scene to the game scene!
-        Manager.changeScene(new Scene_title());
+        Manager.changeScene(new Scene_title("title"));
     }
 
 

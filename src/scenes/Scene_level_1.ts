@@ -149,7 +149,7 @@ export class Scene_level_1 extends Container implements IScene {
                 .to({ scale: { x: 0.05, y: 0.05 } }, 600)
                 .easing(Easing.Quintic.Out)
                 .start()
-                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title()) })
+                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title("title")) })
         })
         this.addChild(this.button_back);
 

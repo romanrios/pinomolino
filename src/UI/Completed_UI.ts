@@ -83,8 +83,19 @@ export class Completed_UI extends Container {
                     this.button_play.eventMode = "static";
                 }
             }
-
         )
+
+        this.input.onEnter.connect(() => {
+            if (typeof document.activeElement !== "undefined") {
+                (document.activeElement as HTMLElement).blur();
+            }
+        }
+        )
+
+
+
+
+
 
         this.addChild(this.input);
 
@@ -110,10 +121,10 @@ export class Completed_UI extends Container {
                 .easing(Easing.Quintic.Out)
                 .start()
                 .onComplete(() => {
-                     sound.stopAll();
-                     Manager.changeScene(new Scene_title());
-                    
-                    })
+                    sound.stopAll();
+                    Manager.changeScene(new Scene_title("highscore"));
+
+                })
 
 
 
@@ -146,7 +157,7 @@ export class Completed_UI extends Container {
                 .to({ scale: { x: 0.05, y: 0.05 } }, 600)
                 .easing(Easing.Quintic.Out)
                 .start()
-                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title()) })
+                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title("title")) })
         })
         this.addChild(this.button_back);
 
@@ -177,9 +188,9 @@ export class Completed_UI extends Container {
                 .to({ scale: { x: 0.05, y: 0.05 } }, 600)
                 .easing(Easing.Quintic.Out)
                 .start()
-                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_level_1());})
+                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_level_1()); })
         })
-        
+
 
 
 
