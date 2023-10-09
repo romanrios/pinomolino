@@ -85,9 +85,9 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
 
         }
 
-        if (Keyboard.state.get("ArrowDown")) {
-            this.speed.y = 1400;
-        }
+        // if (Keyboard.state.get("ArrowDown")) {
+        //     this.speed.y = 1400;
+        // }
     }
 
     // la contraparte de agregar eventos al teclado, debemos apagarlos

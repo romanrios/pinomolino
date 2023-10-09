@@ -1,4 +1,4 @@
-import { Container, Graphics, Sprite, Text, Texture, TilingSprite } from "pixi.js";
+import { Container, Graphics, Sprite, Text, Texture, TilingSprite, isMobile } from "pixi.js";
 import { IScene } from "../utils/IScene";
 import { Manager } from "../utils/Manager";
 import { Player_Pino } from "../game/Player_Pino";
@@ -7,11 +7,12 @@ import { checkCollision } from "../game/IHitbox";
 import { Easing, Tween } from "tweedle.js";
 import { Item } from "../game/Item";
 import { Sound, sound } from "@pixi/sound";
-import { Button_pino } from "../UI/Button_pino";
+import { Button_pino } from "../UI/ButtonText";
 import { Scene_title } from "./Scene_title";
 import { ItemClock } from "../game/ItemClock";
 import { Completed_UI } from "../UI/Completed_UI";
-
+import { TouchControllers } from "../UI/TouchControllers";
+import { ButtonCircle } from "../UI/ButtonCircle";
 
 export class Scene_level_1 extends Container implements IScene {
 
@@ -126,10 +127,9 @@ export class Scene_level_1 extends Container implements IScene {
         casitas.position.set(1088, 430);
         this.world.addChild(casitas);
 
-        this.button_back = new Button_pino("Salir", "Button_bg");
+        this.button_back = new ButtonCircle("button_back.svg");
         this.button_back.eventMode = "static";
-        this.button_back.position.set(90, 45);
-        this.button_back.scale.set(0.9);
+        this.button_back.position.set(72, 50);
         this.button_back.on("pointerup", () => {
 
             const circlemask = new Graphics();
@@ -140,6 +140,10 @@ export class Scene_level_1 extends Container implements IScene {
             this.addChild(circlemask);
 
             this.mask = circlemask;
+
+            Sound.from({
+                url: "whoosh.ogg", singleInstance: true, volume: 0.5
+            }).play();
 
             new Tween(circlemask)
                 .to({ scale: { x: 0.05, y: 0.05 } }, 600)
@@ -177,47 +181,6 @@ export class Scene_level_1 extends Container implements IScene {
         this.timerText.visible = false;
         this.addChild(this.timerText);
 
-
-        // // Movement buttons
-        // const buttonLeft = new Button(0xf52261, "Next");
-        // buttonLeft.position.set(150, 650);
-        // buttonLeft.getChildAt(1).angle = 180
-        // buttonLeft.getChildAt(1).position.x -= 2
-        // this.addChild(buttonLeft);
-        // buttonLeft.on('pointerdown', () => {
-        //     this.playerRobot.speed.x = -350;
-        //     this.playerRobot.setPlayerScaleX(-1);
-        // })
-        //     .on('pointerup', () => { this.playerRobot.speed.x = 0 })
-        //     .on('pointerout', () => { this.playerRobot.speed.x = 0 })
-        //     .on('pointerupoutside', () => { this.playerRobot.speed.x = 0 });
-
-        // const buttonRight: Button = new Button(0xf52261, "Next");
-        // buttonRight.position.set(300, 650);
-        // this.addChild(buttonRight);
-        // buttonRight.on('pointerdown', () => {
-        //     this.playerRobot.speed.x = 350;
-        //     this.playerRobot.setPlayerScaleX(1);
-        // })
-        //     .on('pointerup', () => { this.playerRobot.speed.x = 0 })
-        //     .on('pointerupoutside', () => { this.playerRobot.speed.x = 0 })
-        //     .on('pointerout', () => { this.playerRobot.speed.x = 0 });
-
-        // const buttonJump: Button = new Button(0xf52261, "Next");
-        // buttonJump.position.set(1100, 650);
-        // buttonJump.getChildAt(1).angle = -90;
-        // buttonJump.getChildAt(1).position.y -= 3;
-        // this.addChild(buttonJump);
-        // buttonJump.on('pointerdown', () => { this.playerRobot.jump() });
-
-
-
-
-
-        // ****************************
-        // Tweedle.JS
-        // ****************************      
-
         this.movementPlatform1()
 
         new Tween(this.platform2)
@@ -232,10 +195,12 @@ export class Scene_level_1 extends Container implements IScene {
             .start()
             .repeat(Infinity);
 
+        if (isMobile.any) {
+            this.addChild(new TouchControllers(this.playerRobot))
+        };
+
+
     }
-
-
-
 
 
 
@@ -423,7 +388,6 @@ export class Scene_level_1 extends Container implements IScene {
             )
     }
 
-
     private crearBotones() {
         this.items = [];
         let i = 0
@@ -446,7 +410,6 @@ export class Scene_level_1 extends Container implements IScene {
         this.clocks.push(clock);
         this.world.addChild(clock);
     }
-
 
     private secondsToMinutes(segundos: number): string {
         const minutos: number = Math.floor(segundos / 60);

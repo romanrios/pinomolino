@@ -38,7 +38,15 @@ export const manifest: ResolverManifest = {
                 pinosong_finished: "pinosong_finished.ogg",
                 clocksound: "clock.ogg",
                 Beep: "beep.ogg",
-                whoosh: "whoosh.ogg"
+                whoosh: "whoosh.ogg",
+                Board: "board.png",
+                button_fullscreen: "button_fullscreen.svg",
+                button_speaker: "button_speaker.svg",
+                button_back: "button_back.svg",
+                button_retry: "button_retry.svg",
+                button_speaker_off: "button_speaker_off.svg",
+                button_ranking: "button_ranking.png"
+
             }
         }
     ]
