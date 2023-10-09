@@ -195,10 +195,9 @@ export class Scene_level_1 extends Container implements IScene {
             .start()
             .repeat(Infinity);
 
-        if (isMobile.any) {
+        if (isMobile.any || isMobile.android.device) {
             this.addChild(new TouchControllers(this.playerRobot))
         };
-
 
     }
 
