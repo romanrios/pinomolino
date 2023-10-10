@@ -23,3 +23,8 @@ https://romanrios.github.io/pinomolino/
 
 ## Link a otra propuesta
 https://github.com/romanrios/rockquiz
+
+## Presentación
+
+[Presentación PIXI JS.pdf](https://github.com/romanrios/pinomolino/files/12852210/Presentacion.PIXI.JS.pdf)
+
