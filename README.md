@@ -1,4 +1,7 @@
 # Pino en el Molino 🕹️
+
+![Presentación pinomolino](https://github.com/romanrios/pinomolino/assets/122373737/e7ed01ca-2d39-4339-8d60-fcf202a60037)
+
 Videojuego web de plataformas ambientado en El Molino Fábrica Cultural de Santa Fe, protagonizado por un muñequito de madera.
 
 Diseño, desarrollo y música: Román Ríos
@@ -26,5 +29,7 @@ https://github.com/romanrios/rockquiz
 
 ## Presentación
 
-[Presentación PIXI JS.pdf](https://github.com/romanrios/pinomolino/files/12852210/Presentacion.PIXI.JS.pdf)
+[Presentación PIXI JS.pdf](https://github.com/romanrios/pinomolino/files/12856405/Presentacion.PIXI.JS.pdf)
+
+
 
