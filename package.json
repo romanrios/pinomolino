@@ -7,10 +7,6 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@pixi/filter-crt": "^5.1.1",
-    "@pixi/filter-glow": "^5.2.1",
-    "@pixi/gif": "^2.1.0",
-    "@pixi/particle-emitter": "^5.0.8",
     "@pixi/sound": "^5.2.0",
     "@pixi/ui": "^0.9.0",
     "firebase": "^10.4.0",

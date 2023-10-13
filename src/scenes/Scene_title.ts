@@ -114,7 +114,7 @@ export class Scene_title extends Container implements IScene {
         highScore.visible = false;
         this.addChild(highScore);
 
-        const button_back = new ButtonCircle("button_back.svg");
+        const button_back = new ButtonCircle("button_back.png");
         button_back.eventMode = "static";
         button_back.position.set(1195, 68);
         button_back.scale.set(1.2);
@@ -145,7 +145,7 @@ export class Scene_title extends Container implements IScene {
         })
         container.addChild(button_ranking);
 
-        const button_speaker = new ButtonCircle("button_speaker.svg");
+        const button_speaker = new ButtonCircle("button_speaker.png");
         button_speaker.scale.set(0.8);
         button_speaker.position.set(960, 60);
         button_speaker.eventMode = "static";
@@ -157,7 +157,7 @@ export class Scene_title extends Container implements IScene {
         })
         container.addChild(button_speaker);
 
-        const button_speaker_off = new ButtonCircle("button_speaker_off.svg");
+        const button_speaker_off = new ButtonCircle("button_speaker_off.png");
         button_speaker_off.scale.set(0.8);
         button_speaker_off.position.set(960, 60);
         button_speaker_off.eventMode = "static";
@@ -170,7 +170,7 @@ export class Scene_title extends Container implements IScene {
         container.addChild(button_speaker_off);
 
 
-        const button_fullscreen = new ButtonCircle("button_fullscreen.svg");
+        const button_fullscreen = new ButtonCircle("button_fullscreen.png");
         button_fullscreen.scale.set(0.8);
         button_fullscreen.position.set(1070, 60);
         button_fullscreen.onpointerdown = () => {

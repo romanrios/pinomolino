@@ -20,7 +20,7 @@ export class Button_pino extends Container {
         button_play.on("pointerup", () => { 
             
             Sound.from({
-                url: "whoosh.ogg", singleInstance: true, volume: 0.5
+                url: "whoosh.mp3", singleInstance: true, volume: 0.5
             }).play();
 
          })

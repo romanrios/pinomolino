@@ -134,7 +134,7 @@ export class Completed_UI extends Container {
         })
         this.addChild(this.button_play);
 
-        this.button_back = new ButtonCircle("button_back.svg");
+        this.button_back = new ButtonCircle("button_back.png");
         this.button_back.scale.set(0.9);
         this.button_back.eventMode = "static";
         this.button_back.position.set(490, 550);
@@ -150,7 +150,7 @@ export class Completed_UI extends Container {
             this.parent.mask = circlemask;
 
             Sound.from({
-                url: "whoosh.ogg", singleInstance: true, volume: 0.5
+                url: "whoosh.mp3", singleInstance: true, volume: 0.5
             }).play();
 
             new Tween(circlemask)
@@ -164,7 +164,7 @@ export class Completed_UI extends Container {
 
 
 
-        this.button_retry = new ButtonCircle("button_retry.svg");
+        this.button_retry = new ButtonCircle("button_retry.png");
         this.addChild(this.button_retry);
         this.button_retry.scale.set(0.9);
         this.button_retry.eventMode = "static";
@@ -181,7 +181,7 @@ export class Completed_UI extends Container {
             this.parent.mask = circlemask;
 
             Sound.from({
-                url: "whoosh.ogg", singleInstance: true, volume: 0.5
+                url: "whoosh.mp3", singleInstance: true, volume: 0.5
             }).play();
 
             new Tween(circlemask)

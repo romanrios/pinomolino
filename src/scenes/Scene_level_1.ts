@@ -127,7 +127,7 @@ export class Scene_level_1 extends Container implements IScene {
         casitas.position.set(1088, 430);
         this.world.addChild(casitas);
 
-        this.button_back = new ButtonCircle("button_back.svg");
+        this.button_back = new ButtonCircle("button_back.png");
         this.button_back.eventMode = "static";
         this.button_back.position.set(72, 50);
         this.button_back.on("pointerup", () => {
@@ -142,7 +142,7 @@ export class Scene_level_1 extends Container implements IScene {
             this.mask = circlemask;
 
             Sound.from({
-                url: "whoosh.ogg", singleInstance: true, volume: 0.5
+                url: "whoosh.mp3", singleInstance: true, volume: 0.5
             }).play();
 
             new Tween(circlemask)
@@ -283,7 +283,7 @@ export class Scene_level_1 extends Container implements IScene {
                     this.cantidadBotones--;
                     Sound.from({
                         url: `pip${Math.floor(Math.random() * 4) + 1
-                            }.ogg`, singleInstance: true
+                            }.mp3`, singleInstance: true
                     }).play();
 
                     if (Number(this.score.text) > 999) {
@@ -303,7 +303,7 @@ export class Scene_level_1 extends Container implements IScene {
                     this.timerNumber += 10;
                     this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
                     Sound.from({
-                        url: "clock.ogg", singleInstance: true, volume: 0.4
+                        url: "clock.mp3", singleInstance: true, volume: 0.4
                     }).play();
                 }
                 i.collision = true;
