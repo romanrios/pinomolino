@@ -45,24 +45,24 @@ export class Scene_level_1 extends Container implements IScene {
 
         sound.stopAll();
 
-        this.background = new TilingSprite(Texture.from("bg_molino"), Manager.width, Manager.height);
+        this.background = new TilingSprite(Texture.from("bg_molino.jpg"), Manager.width, Manager.height);
         this.background.scale.set(1.5);
         this.background.position.set(-100, -400);
         this.addChild(this.background);
 
-        this.table = new TilingSprite(Texture.from("table"), Manager.width, Manager.height);
+        this.table = new TilingSprite(Texture.from("table.png"), Manager.width, Manager.height);
         this.table.y = 550;
         this.addChild(this.table);
 
         this.world = new Container()
         this.addChild(this.world)
 
-        const hex_blocks = Sprite.from("hex_blocks");
+        const hex_blocks = Sprite.from("hex_blocks.png");
         hex_blocks.scale.set(1.5);
         hex_blocks.position.set(-398, -17);
         this.world.addChild(hex_blocks);
 
-        const hex_blocks2 = Sprite.from("hex_blocks");
+        const hex_blocks2 = Sprite.from("hex_blocks.png");
         hex_blocks2.scale.set(1.5);
         hex_blocks2.position.set(2976, -17);
         this.world.addChild(hex_blocks2);
@@ -94,15 +94,15 @@ export class Scene_level_1 extends Container implements IScene {
         this.platform5.visible = false;
         this.platforms.push(this.platform5);
 
-        const domino = Sprite.from("Domino");
+        const domino = Sprite.from("domino.png");
         domino.position.set(2500, 478);
         this.world.addChild(domino);
 
-        const stick = Sprite.from("Stick");
+        const stick = Sprite.from("stick.png");
         stick.position.set(1834, 257);
         this.world.addChild(stick);
 
-        this.molino = Sprite.from("Molino");
+        this.molino = Sprite.from("molino.png");
         this.molino.anchor.set(0.5);
         this.molino.position.set(1840, 200);
         this.world.addChild(this.molino);
@@ -114,7 +114,7 @@ export class Scene_level_1 extends Container implements IScene {
         this.playerRobot.scale.set(0.9);
         this.world.addChild(this.playerRobot);
 
-        this.UI_number_container = Sprite.from("UI_number_container");
+        this.UI_number_container = Sprite.from("UI_number_container.png");
         this.UI_number_container.x = 1070;
         this.addChild(this.UI_number_container);
 
@@ -123,7 +123,7 @@ export class Scene_level_1 extends Container implements IScene {
         this.score.anchor.set(0.5);
         this.addChild(this.score);
 
-        const casitas = Sprite.from("Casitas");
+        const casitas = Sprite.from("casitas.png");
         casitas.position.set(1088, 430);
         this.world.addChild(casitas);
 
@@ -168,7 +168,7 @@ export class Scene_level_1 extends Container implements IScene {
             .start()
             .onComplete(() => { this.removeChild(circlemask); })
 
-        this.clockIcon = Sprite.from("Clock");
+        this.clockIcon = Sprite.from("clock.png");
         this.clockIcon.anchor.set(0.5);
         this.clockIcon.scale.set(0.4);
         this.clockIcon.position.set(Manager.width / 2 - 107, 70)
@@ -279,20 +279,25 @@ export class Scene_level_1 extends Container implements IScene {
         for (let item of this.items) {
             if (checkCollision(this.playerRobot, item) != null && this.gameState != "finished") {
                 if (!item.collision) {
-                    this.score.text = Number(this.score.text) + 1
-                    this.cantidadBotones--;
+
                     Sound.from({
                         url: `pip${Math.floor(Math.random() * 4) + 1
                             }.mp3`, singleInstance: true
                     }).play();
 
-                    if (Number(this.score.text) > 999) {
-                        this.score.scale.set(0.72);
-                    }
                     item.collision = true;
-                    this.world.removeChild(item)
-                    if (this.score.text == "200") {
-                    }
+
+                    new Tween(item)
+                        .to({ x: -this.world.x + 1220, y: 70 }, 400)
+                        .start()
+                        .onComplete(() => {
+                            this.world.removeChild(item)
+                            this.score.text = Number(this.score.text) + 1
+                            this.cantidadBotones--;
+                            if (Number(this.score.text) > 999) {
+                                this.score.scale.set(0.72);
+                            }
+                        })
                 }
             }
         }
@@ -300,14 +305,22 @@ export class Scene_level_1 extends Container implements IScene {
         for (let i of this.clocks) {
             if (checkCollision(this.playerRobot, i) != null && this.gameState != "finished") {
                 if (!i.collision) {
-                    this.timerNumber += 10;
-                    this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
+
                     Sound.from({
                         url: "clock.mp3", singleInstance: true, volume: 0.4
                     }).play();
+                    i.collision = true;
+                    
+                    this.timerNumber += 10;
+                    this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
+
+                    new Tween(i)
+                        .to({ x: -this.world.x + 620, y: 70 }, 300)
+                        .start()
+                        .onComplete(() => {
+                            this.world.removeChild(i)
+                        })
                 }
-                i.collision = true;
-                this.world.removeChild(i)
             }
         }
 

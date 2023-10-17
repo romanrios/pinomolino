@@ -26,7 +26,7 @@ export class Completed_UI extends Container {
         black_alpha.alpha = 0.5;
         this.addChild(black_alpha);
 
-        const bg = Sprite.from("completed_ui_bg");
+        const bg = Sprite.from("completed_ui_bg.png");
         bg.anchor.set(0.5);
         bg.scale.set(0.75);
         bg.position.set(Manager.width / 2, 359);
@@ -46,7 +46,7 @@ export class Completed_UI extends Container {
         text_congrat.position.set(bg.x - 90, 347);
         this.addChild(text_congrat);
 
-        const UI_number_container = Sprite.from("UI_number_container");
+        const UI_number_container = Sprite.from("UI_number_container.png");
         UI_number_container.position.set(bg.x + 100, 355)
         UI_number_container.anchor.set(0.5);
         this.addChild(UI_number_container);
@@ -99,7 +99,7 @@ export class Completed_UI extends Container {
 
         this.addChild(this.input);
 
-        this.button_play = new Button_pino("Enviar", "Button_bg2");
+        this.button_play = new Button_pino("Enviar", "button_bg2.png");
         this.button_play.position.set(735, 566);
         this.button_play.eventMode = "none";
         this.button_play.alpha = 0.8;

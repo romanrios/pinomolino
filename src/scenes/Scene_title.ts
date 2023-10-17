@@ -16,7 +16,7 @@ export class Scene_title extends Container implements IScene {
 
         sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
 
-        const bg = Sprite.from("bg_molino");
+        const bg = Sprite.from("bg_molino.jpg");
         bg.anchor.set(0.5);
         bg.position.set(Manager.width / 2, Manager.height / 2)
         bg.scale.set(1.2);
@@ -25,7 +25,7 @@ export class Scene_title extends Container implements IScene {
         const container = new Container();
         this.addChild(container);
 
-        const title = Sprite.from("title");
+        const title = Sprite.from("title.png");
         title.anchor.set(0.5);
         title.position.set(Manager.width / 2, Manager.height / 2 - 20);
         container.addChild(title);
@@ -56,7 +56,7 @@ export class Scene_title extends Container implements IScene {
         text1.position.set(618, 348);
         container.addChild(text1)
 
-        const buttonJugar = new Button_pino("Jugar", "Button_bg")
+        const buttonJugar = new Button_pino("Jugar", "button_bg.png")
         buttonJugar.position.set(740, 520);
         buttonJugar.eventMode = "static";
         buttonJugar.on("pointerup", () => {

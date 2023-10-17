@@ -10,7 +10,7 @@ export class ItemClock extends Container implements IHitbox {
 
         super();
 
-        const boton = Sprite.from("ClockColor")
+        const boton = Sprite.from("clock_color.png")
         boton.anchor.set(0.5);
 
         this.addChild(boton);

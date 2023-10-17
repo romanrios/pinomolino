@@ -8,7 +8,7 @@ export class Platform extends PhysicsContainer implements IHitbox {
     constructor() {
         super();
 
-        const platform = Sprite.from("Platform");
+        const platform = Sprite.from("platform.png");
         platform.y = -25
         this.addChild(platform);                
         

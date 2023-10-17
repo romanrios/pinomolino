@@ -10,7 +10,7 @@ export class HighScore extends Container {
   constructor() {
     super()
 
-    this.board = Sprite.from("Board");
+    this.board = Sprite.from("board.png");
     this.addChild(this.board);
 
 
