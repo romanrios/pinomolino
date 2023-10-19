@@ -12,7 +12,7 @@ Este juego fue desarrollado como parte del curso de Desarrollo de Videojuegos en
 ## Demo jugable
 https://romanrios.github.io/pinomolino/
 
-## Screenshots
+## Imágenes
 
 ![screenshot01](https://github.com/romanrios/pinomolino/assets/122373737/eb2f1b98-2647-43fc-9997-a73dfe82d073)
 
@@ -23,6 +23,14 @@ https://romanrios.github.io/pinomolino/
 ![screenshot04](https://github.com/romanrios/pinomolino/assets/122373737/43182172-469b-4b58-97b7-9cca444e8c69)
 
 ![screenshot05](https://github.com/romanrios/pinomolino/assets/122373737/b5f72490-e0c8-431f-9741-677b7561265e)
+
+![a02](https://github.com/romanrios/pinomolino/assets/122373737/9ef6ae93-77da-434a-b4ae-40285336ae15)
+
+![a03](https://github.com/romanrios/pinomolino/assets/122373737/f4a41d76-578d-4199-9ba1-cc8c5dde02bf)
+
+![a04](https://github.com/romanrios/pinomolino/assets/122373737/9fd4664b-20e0-4d21-af8b-5cf5f2b614aa)
+
+![a05](https://github.com/romanrios/pinomolino/assets/122373737/1514bf56-cbf1-4acb-b9c8-5433f6cdc41f)
 
 ## Link a otra propuesta
 https://github.com/romanrios/rockquiz
