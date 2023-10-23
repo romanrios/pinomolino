@@ -7,7 +7,7 @@ Videojuego web de plataformas ambientado en El Molino Fábrica Cultural de Santa
 Diseño, desarrollo y música: Román Ríos
 
 ## Información del Proyecto
-Este juego fue desarrollado como parte del curso de Desarrollo de Videojuegos en Pixi.JS, impartido por The Rabbit Hole, con el apoyo de Capital Activa y la Municipalidad de Santa Fe.
+Proyecto del curso de Desarrollo de Videojuegos en Pixi.JS, impartido por The Rabbit Hole, con el apoyo de Capital Activa y la Municipalidad de Santa Fe.
 
 ## Demo jugable
 https://romanrios.github.io/pinomolino/
@@ -34,10 +34,6 @@ https://romanrios.github.io/pinomolino/
 
 ## Link a otra propuesta
 https://github.com/romanrios/rockquiz
-
-## Presentación
-
-[Presentación PIXI JS.pdf](https://github.com/romanrios/pinomolino/files/12856405/Presentacion.PIXI.JS.pdf)
 
 
 
