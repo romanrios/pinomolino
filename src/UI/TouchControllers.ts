@@ -7,7 +7,7 @@ export class TouchControllers extends Container {
         super();
 
         // Movement buttons
-        const buttonLeft = new Button(0xf52261, "Next");
+        const buttonLeft = new Button(0xf52261, "next.png");
         buttonLeft.position.set(150, 650);
         buttonLeft.getChildAt(1).angle = 180
         buttonLeft.getChildAt(1).position.x -= 2
@@ -20,7 +20,7 @@ export class TouchControllers extends Container {
             .on('pointerout', () => { player.speed.x = 0 })
             .on('pointerupoutside', () => { player.speed.x = 0 });
 
-        const buttonRight: Button = new Button(0xf52261, "Next");
+        const buttonRight: Button = new Button(0xf52261, "next.png");
         buttonRight.position.set(300, 650);
         this.addChild(buttonRight);
         buttonRight.on('pointerdown', () => {
@@ -31,7 +31,7 @@ export class TouchControllers extends Container {
             .on('pointerupoutside', () => { player.speed.x = 0 })
             .on('pointerout', () => { player.speed.x = 0 });
 
-        const buttonJump: Button = new Button(0xf52261, "Next");
+        const buttonJump: Button = new Button(0xf52261, "next.png");
         buttonJump.position.set(1100, 650);
         buttonJump.getChildAt(1).angle = -90;
         buttonJump.getChildAt(1).position.y -= 3;

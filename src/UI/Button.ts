@@ -6,7 +6,7 @@ export class Button extends Container {
 
         
         const button = new NineSlicePlane(
-            Texture.from("Panel"),
+            Texture.from("panel3.png"),
             30, 30, 30, 30
         );
         button.width = 110;
