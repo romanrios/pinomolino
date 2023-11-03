@@ -14,7 +14,7 @@ export class Scene_title extends Container implements IScene {
     constructor(title_or_highscore: string) {
         super()
 
-        sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
+        sound.play("pinosong_title", { singleInstance: true, loop: true, volume: 0.5 });
 
         const bg = Sprite.from("bg_molino.jpg");
         bg.anchor.set(0.5);
@@ -23,6 +23,7 @@ export class Scene_title extends Container implements IScene {
         this.addChild(bg);
 
         const container = new Container();
+        container.y = -720;
         this.addChild(container);
 
         const title = Sprite.from("title.png");
@@ -84,6 +85,13 @@ export class Scene_title extends Container implements IScene {
             , { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 15, lineHeight: 30, align: "center" });
         text2.anchor.x = 0.5;
         text2.position.set(Manager.width / 2, 605);
+        text2.eventMode = "static";
+        text2.cursor = "pointer";
+        text2.on("pointerup", () => {
+            window.open("https://romanrios.github.io", "_blank");
+        })
+            .on("pointerover", () => { text2.scale.set(1.05) })
+            .on("pointerout", () => { text2.scale.set(1) })
         container.addChild(text2)
 
         const circlemask = new Graphics();
@@ -99,7 +107,13 @@ export class Scene_title extends Container implements IScene {
             .to({ scale: { x: 10, y: 10 } }, 600)
             .easing(Easing.Quintic.In)
             .start()
-            .onComplete(() => { this.removeChild(circlemask); })
+            .onComplete(() => {
+                new Tween(container)
+                    .to({ y: 0 }, 800)
+                    .start()
+                    .easing(Easing.Bounce.Out)
+                this.removeChild(circlemask);
+            })
 
 
         const black_alpha = new Graphics();
@@ -130,7 +144,7 @@ export class Scene_title extends Container implements IScene {
         if (title_or_highscore == "highscore") {
             highScore.visible = true;
             container.visible = false;
-            button_back.visible=true;
+            button_back.visible = true;
             black_alpha.visible = true;
         }
 
@@ -149,8 +163,10 @@ export class Scene_title extends Container implements IScene {
         button_speaker.scale.set(0.8);
         button_speaker.position.set(960, 60);
         button_speaker.eventMode = "static";
+
         button_speaker.on("pointerup", () => {
             sound.muteAll();
+            Manager.muted = true;
             button_speaker.visible = false;
             button_speaker_off.visible = true;
 
@@ -163,11 +179,17 @@ export class Scene_title extends Container implements IScene {
         button_speaker_off.eventMode = "static";
         button_speaker_off.visible = false;
         button_speaker_off.on("pointerup", () => {
+            Manager.muted = false;
             sound.unmuteAll();
             button_speaker.visible = true;
             button_speaker_off.visible = false;
         })
         container.addChild(button_speaker_off);
+
+        if(Manager.muted){
+            button_speaker.visible = false;
+            button_speaker_off.visible = true;
+        }
 
 
         const button_fullscreen = new ButtonCircle("button_fullscreen.png");

@@ -10,6 +10,8 @@ export class Manager {
     private static app: Application;
     private static currentScene: IScene;
 
+    public static muted: boolean = false;
+
     // Width and Height are read-only after creation (for now)
     private static _width: number;
     private static _height: number;

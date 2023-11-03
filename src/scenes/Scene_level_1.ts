@@ -220,7 +220,7 @@ export class Scene_level_1 extends Container implements IScene {
                 }
                 if (this.timerText.text == "0") {
                     this.gameState = "started"
-                    sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.5 });
+                    sound.play("pino_song", { singleInstance: true, loop: true, volume: 0.45 });
                     this.clockIcon.visible = true;
                 }
             }
@@ -244,8 +244,24 @@ export class Scene_level_1 extends Container implements IScene {
                 this.removeChild(this.score);
                 sound.stopAll()
                 sound.play("pinosong_finished", { singleInstance: true, loop: false, volume: 0.6 });
+
+                const black_alpha = new Graphics();
+                black_alpha.beginFill(0x000000);
+                black_alpha.drawRect(0, 0, Manager.width, Manager.height);
+                black_alpha.alpha = 0;
+                this.addChild(black_alpha);
+                new Tween(black_alpha)
+                .to({ alpha: 0.5 }, 800)
+                .start()
+
                 const completed = new Completed_UI(this.score.text);
+                completed.y = -720;
+
                 this.addChild(completed);
+                new Tween(completed)
+                    .to({ y: 0 }, 800)
+                    .start()
+                    .easing(Easing.Bounce.Out)
             }
         }
 
@@ -310,7 +326,7 @@ export class Scene_level_1 extends Container implements IScene {
                         url: "clock.mp3", singleInstance: true, volume: 0.4
                     }).play();
                     i.collision = true;
-                    
+
                     this.timerNumber += 10;
                     this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
 

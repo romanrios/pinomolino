@@ -5,6 +5,7 @@ import { Item } from "../game/Item";
 export class HighScore extends Container {
   private scoresArray: any;
   private board: Sprite;
+  private tablaPuntuaciones: any;
 
 
   constructor() {
@@ -35,10 +36,14 @@ export class HighScore extends Container {
       }
 
       this.scoresArray.sort((a: any, b: any) => Number(b.puntaje) - Number(a.puntaje));
-      this.scoresArray = this.scoresArray.slice(0,10);
+      this.scoresArray = this.scoresArray.slice(0, 10);
       // Arreglos para almacenar nombres y puntuaciones
 
-      const tablaPuntuaciones = new Container();
+      if (this.tablaPuntuaciones) {
+        this.removeChild(this.tablaPuntuaciones);
+      }
+
+      this.tablaPuntuaciones = new Container();
       const espaciadoVertical = 39.6;
       const marginTop = 27;
 
@@ -61,13 +66,12 @@ export class HighScore extends Container {
         filaPuntos.anchor.x = 1;
         filaPuntos.position.set(250, indice * espaciadoVertical + marginTop)
 
-        tablaPuntuaciones.addChild(filaNombres);
-        tablaPuntuaciones.addChild(filaPuntos);
+        this.tablaPuntuaciones.addChild(filaNombres);
+        this.tablaPuntuaciones.addChild(filaPuntos);
       });
 
-
-      tablaPuntuaciones.position.set(95, 155)
-      this.addChild(tablaPuntuaciones);
+      this.tablaPuntuaciones.position.set(95, 155);
+      this.addChild(this.tablaPuntuaciones);
 
     });
 

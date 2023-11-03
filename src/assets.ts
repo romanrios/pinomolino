@@ -19,11 +19,12 @@ export const manifest: ResolverManifest = {
                 Montserrat: "Montserrat-Bold.ttf",
 
                 pino_song: "pino_song.mp3",
+                pinosong_title: "pinosong_title.mp3",
+                pinosong_finished: "pinosong_finished.mp3",
                 pip1: "pip1.mp3",
                 pip2: "pip2.mp3",
                 pip3: "pip3.mp3",
                 pip4: "pip4.mp3",
-                pinosong_finished: "pinosong_finished.mp3",
                 clocksound: "clock.mp3",
                 Beep: "beep.mp3",
                 whoosh: "whoosh.mp3",

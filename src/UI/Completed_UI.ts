@@ -20,12 +20,6 @@ export class Completed_UI extends Container {
     constructor(score: string) {
         super()
 
-        const black_alpha = new Graphics();
-        black_alpha.beginFill(0x000000);
-        black_alpha.drawRect(0, 0, Manager.width, Manager.height);
-        black_alpha.alpha = 0.5;
-        this.addChild(black_alpha);
-
         const bg = Sprite.from("completed_ui_bg.png");
         bg.anchor.set(0.5);
         bg.scale.set(0.75);
