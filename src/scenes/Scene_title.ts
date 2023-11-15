@@ -61,7 +61,8 @@ export class Scene_title extends Container implements IScene {
         buttonJugar.position.set(740, 520);
         buttonJugar.eventMode = "static";
         buttonJugar.on("pointerup", () => {
-
+            
+            buttonJugar.eventMode = "none";
             const circlemask = new Graphics();
             circlemask.position.set(Manager.width / 2, Manager.height / 2);
             circlemask.beginFill(0x994466);
@@ -186,7 +187,7 @@ export class Scene_title extends Container implements IScene {
         })
         container.addChild(button_speaker_off);
 
-        if(Manager.muted){
+        if (Manager.muted) {
             button_speaker.visible = false;
             button_speaker_off.visible = true;
         }

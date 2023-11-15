@@ -16,7 +16,7 @@ import { ButtonCircle } from "../UI/ButtonCircle";
 
 export class Scene_level_1 extends Container implements IScene {
 
-    private playerRobot: Player_Pino;
+    private player: Player_Pino;
     private platforms: Platform[] = [];
     private platform1: Platform;
     private platform2: Platform;
@@ -39,6 +39,7 @@ export class Scene_level_1 extends Container implements IScene {
     private gameState: string = "none";
     private button_back: Button_pino;
     private UI_number_container: Sprite;
+    private platform1speedX: number = 0;
 
     constructor() {
         super();
@@ -109,10 +110,10 @@ export class Scene_level_1 extends Container implements IScene {
 
         this.world.addChild(...this.platforms)
 
-        this.playerRobot = new Player_Pino();
-        this.playerRobot.position.set(417, 620);
-        this.playerRobot.scale.set(0.9);
-        this.world.addChild(this.playerRobot);
+        this.player = new Player_Pino();
+        this.player.position.set(417, 620);
+        this.player.scale.set(0.9);
+        this.world.addChild(this.player);
 
         this.UI_number_container = Sprite.from("UI_number_container.png");
         this.UI_number_container.x = 1070;
@@ -196,7 +197,7 @@ export class Scene_level_1 extends Container implements IScene {
             .repeat(Infinity);
 
         if (isMobile.any || isMobile.android.device) {
-            this.addChild(new TouchControllers(this.playerRobot))
+            this.addChild(new TouchControllers(this.player))
         };
 
     }
@@ -204,6 +205,8 @@ export class Scene_level_1 extends Container implements IScene {
 
 
     public update(deltaTime: number, _deltaFrame: number) {
+
+        this.platform1speedX = this.calcularVelocidadX(this.platform1, _deltaFrame);
 
         this.timerCounter += deltaTime;
 
@@ -251,8 +254,8 @@ export class Scene_level_1 extends Container implements IScene {
                 black_alpha.alpha = 0;
                 this.addChild(black_alpha);
                 new Tween(black_alpha)
-                .to({ alpha: 0.5 }, 800)
-                .start()
+                    .to({ alpha: 0.5 }, 800)
+                    .start()
 
                 const completed = new Completed_UI(this.score.text);
                 completed.y = -720;
@@ -265,35 +268,36 @@ export class Scene_level_1 extends Container implements IScene {
             }
         }
 
-        this.world.x = -this.playerRobot.x * this.worldTransform.a + Manager.width / 2;
+        this.world.x = -this.player.x * this.worldTransform.a + Manager.width / 2;
         this.background.tilePosition.x = this.world.x * 0.15;
         this.background.tilePosition.x %= Manager.width;
         this.table.tilePosition.x = this.world.x;
 
         // Sub-stepping
-        if (this.playerRobot.speed.y > 1000) {
+        if (this.player.speed.y > 1000) {
             while (deltaTime > 1) {
                 deltaTime -= 1;
-                this.playerRobot.update(1);
+                this.player.update(1);
                 for (let platform of this.platforms) {
-                    const overlap = checkCollision(this.playerRobot, platform);
+                    const overlap = checkCollision(this.player, platform);
                     if (overlap != null) {
-                        this.playerRobot.separate(overlap, platform.position, platform.speed.x);
+                        this.player.separate(overlap, platform.position, platform.speed.x);
                     }
                 }
             }
         } else {
-            this.playerRobot.update(deltaTime);
+            this.player.update(deltaTime);
             for (let platform of this.platforms) {
-                const overlap = checkCollision(this.playerRobot, platform);
+                const overlap = checkCollision(this.player, platform);
                 if (overlap != null) {
-                    this.playerRobot.separate(overlap, platform.position, platform.speed.x);
+                    this.player.separate(overlap, platform.position, platform.speed.x);
                 }
             }
         }
 
-        for (let item of this.items) {
-            if (checkCollision(this.playerRobot, item) != null && this.gameState != "finished") {
+        for (let i = this.items.length - 1; i >= 0; i--) {
+            const item = this.items[i];
+            if (checkCollision(this.player, item) && this.gameState != "finished") {
                 if (!item.collision) {
 
                     Sound.from({
@@ -301,25 +305,35 @@ export class Scene_level_1 extends Container implements IScene {
                             }.mp3`, singleInstance: true
                     }).play();
 
+                    this.items.splice(i, 1);
                     item.collision = true;
+
 
                     new Tween(item)
                         .to({ x: -this.world.x + 1220, y: 70 }, 400)
                         .start()
                         .onComplete(() => {
-                            this.world.removeChild(item)
+                            item.tween1.stop();
+                            item.tween2.stop();
+
+                            // Remover item del arreglo
+                            item.destroy();
                             this.score.text = Number(this.score.text) + 1
                             this.cantidadBotones--;
                             if (Number(this.score.text) > 999) {
                                 this.score.scale.set(0.72);
                             }
                         })
+
+
+
                 }
             }
         }
 
         for (let i of this.clocks) {
-            if (checkCollision(this.playerRobot, i) != null && this.gameState != "finished") {
+            if (checkCollision(this.player, i) != null && this.gameState != "finished") {
+
                 if (!i.collision) {
 
                     Sound.from({
@@ -341,26 +355,26 @@ export class Scene_level_1 extends Container implements IScene {
         }
 
         // limit horizontal
-        if (this.playerRobot.x > 3000) {
+        if (this.player.x > 3000) {
             //limit right
-            this.playerRobot.x = 3000;
-        } else if (this.playerRobot.x < 312) {
+            this.player.x = 3000;
+        } else if (this.player.x < 312) {
             // limit left
-            this.playerRobot.x = 312;
+            this.player.x = 312;
         }
         // limit vertical
-        if (this.playerRobot.y > Manager.height - 100) {
+        if (this.player.y > Manager.height - 100) {
             // if (this.playerRobot.canJump == false && this.particle.emit == true) {
             //     this.cartoonSmoke.emit = true
             // }
-            this.playerRobot.y = Manager.height - 100;
-            this.playerRobot.speed.y = 0;
-            this.playerRobot.canJump = true;
-            if (this.playerRobot.speed.x !== 0) {
-                this.playerRobot.playState("run", false)
+            this.player.y = Manager.height - 100;
+            this.player.speed.y = 0;
+            this.player.canJump = true;
+            if (this.player.speed.x !== 0) {
+                this.player.playState("run", false)
             }
             else {
-                this.playerRobot.playState("idle", true)
+                this.player.playState("idle", true)
             }
         }
 
@@ -386,26 +400,26 @@ export class Scene_level_1 extends Container implements IScene {
 
     private movementPlatform1() {
         new Tween(this.platform1)
-            .onUpdate(() => { this.platform1.speed.x = 0 })
+            .onUpdate(() => { this.platform1.speed.x = this.platform1speedX })
             .to({ y: 400 }, 3000)
             .easing(Easing.Elastic.Out)
             .start()
             .onComplete(
                 () => {
                     new Tween(this.platform1)
-                        .onUpdate(() => { this.platform1.speed.x = 2.8 })
+                        .onUpdate(() => { this.platform1.speed.x = this.platform1speedX })
                         .to({ x: this.platform1.x + 500, y: 400 }, 3000)
                         .start()
                         .onComplete(
                             () => {
                                 new Tween(this.platform1)
-                                    .onUpdate(() => { this.platform1.speed.x = 0 })
+                                    .onUpdate(() => { this.platform1.speed.x = this.platform1speedX })
                                     .to({ y: 300 }, 3000)
                                     .easing(Easing.Elastic.Out)
                                     .start()
                                     .onComplete(() => {
                                         new Tween(this.platform1)
-                                            .onUpdate(() => { this.platform1.speed.x = -2.8 })
+                                            .onUpdate(() => { this.platform1.speed.x = this.platform1speedX })
                                             .to({ x: this.platform1.x - 500, y: 300 }, 3000)
                                             .start()
                                             .onComplete(this.movementPlatform1.bind(this))
@@ -423,12 +437,14 @@ export class Scene_level_1 extends Container implements IScene {
             const item1 = new Item();
             item1.position.set(Math.random() * 2750 + 280, Math.random() * 430 + 180);
             this.items.push(item1);
+
             i++;
             this.cantidadBotones++;
         }
 
         for (let item of this.items) {
             this.world.addChild(item)
+            item.collision = false;
         }
 
         this.botonesMaximos += 10;
@@ -448,6 +464,24 @@ export class Scene_level_1 extends Container implements IScene {
         const segundosFormateados: string = segundosRestantes < 10 ? `0${segundosRestantes}` : segundosRestantes.toString();
 
         return `${minutosFormateados}:${segundosFormateados}`;
+    }
+
+
+    private calcularVelocidadX(objeto: any, deltaTime: number): number {
+        // Comprobar si el objeto tiene propiedades de posición anteriores almacenadas
+        if (typeof objeto.previousX === 'undefined') {
+            // Si no hay posiciones anteriores, establecer la posición actual como posición anterior
+            objeto.previousX = objeto.x;
+            return 0; // No hay velocidad inicial en el primer fotograma
+        } else {
+            // Calcular la velocidad x usando la diferencia de posiciones y el deltaTime
+            const velocidadX = (objeto.x - objeto.previousX) / (deltaTime);
+
+            // Actualizar la posición anterior para el próximo cálculo
+            objeto.previousX = objeto.x;
+
+            return velocidadX;
+        }
     }
 
 }

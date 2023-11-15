@@ -4,18 +4,18 @@ export class Button extends Container {
     constructor(tint: number, buttonSprite: SpriteSource) {
         super();
 
-        
+
         const button = new NineSlicePlane(
             Texture.from("panel3.png"),
             30, 30, 30, 30
         );
-        button.width = 110;
-        button.height = 110;
+        button.width = 140;
+        button.height = 140;
         button.pivot.set(button.width / 2);
-        button.alpha = 0.8;
+        button.alpha = 0.5;
         button.tint = tint;
         this.addChild(button);
-        
+
         const buttonContent = Sprite.from(buttonSprite)
         buttonContent.pivot.set(buttonContent.width / 2);
         buttonContent.scale.set(0.7);
@@ -29,18 +29,18 @@ export class Button extends Container {
             button.tint = button.tint as number + 10000;
         }
 
-        this.onmouseout  = () => {
+        this.onmouseout = () => {
             button.tint = button.tint as number - 10000;
         }
 
         this.onpointerout = () => {
-            this.scale.set(1);
+            this.scale.set(this.scale.x / 0.9);
         }
 
         this.onpointerdown = () => {
-            this.scale.set(0.9);
+            this.scale.set(this.scale.x * 0.9);
         }
-        
+
         this.onpointerup = () => {
             this.scale.set(1);
         }

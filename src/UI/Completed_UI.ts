@@ -12,7 +12,7 @@ import { Scene_level_1 } from "../scenes/Scene_level_1";
 
 export class Completed_UI extends Container {
     private input: Input;
-    private button_play: Button_pino;
+    private button_send: Button_pino;
     private score_text: Text;
     button_back: ButtonCircle;
     button_retry: ButtonCircle;
@@ -70,11 +70,11 @@ export class Completed_UI extends Container {
         this.input.onChange.connect(
             () => {
                 if (this.input.value == "") {
-                    this.button_play.alpha = 0.6;
-                    this.button_play.eventMode = "none";
+                    this.button_send.alpha = 0.6;
+                    this.button_send.eventMode = "none";
                 } else {
-                    this.button_play.alpha = 1;
-                    this.button_play.eventMode = "static";
+                    this.button_send.alpha = 1;
+                    this.button_send.eventMode = "static";
                 }
             }
         )
@@ -93,11 +93,13 @@ export class Completed_UI extends Container {
 
         this.addChild(this.input);
 
-        this.button_play = new Button_pino("Enviar", "button_bg2.png");
-        this.button_play.position.set(735, 566);
-        this.button_play.eventMode = "none";
-        this.button_play.alpha = 0.8;
-        this.button_play.on("pointerup", () => {
+        this.button_send = new Button_pino("Enviar", "button_bg2.png");
+        this.button_send.position.set(735, 566);
+        this.button_send.eventMode = "none";
+        this.button_send.alpha = 0.8;
+        this.button_send.on("pointerup", () => {
+
+            this.button_send.eventMode = "none";
 
             agregarPuntaje(this.input.value, this.score_text.text)
 
@@ -119,14 +121,9 @@ export class Completed_UI extends Container {
                     Manager.changeScene(new Scene_title("highscore"));
 
                 })
-
-
-
-
-
-
         })
-        this.addChild(this.button_play);
+
+        this.addChild(this.button_send);
 
         this.button_back = new ButtonCircle("button_back.png");
         this.button_back.scale.set(0.9);
@@ -134,6 +131,7 @@ export class Completed_UI extends Container {
         this.button_back.position.set(490, 550);
         this.button_back.on("pointerup", () => {
 
+            this.button_back.eventMode = "none";
             const circlemask = new Graphics();
             circlemask.position.set(Manager.width / 2, Manager.height / 2);
             circlemask.beginFill(0x994466);
@@ -165,6 +163,7 @@ export class Completed_UI extends Container {
         this.button_retry.position.set(590, 565);
         this.button_retry.on("pointerup", () => {
 
+            this.button_retry.eventMode = "none";
             const circlemask = new Graphics();
             circlemask.position.set(Manager.width / 2, Manager.height / 2);
             circlemask.beginFill(0x994466);

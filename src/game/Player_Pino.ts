@@ -42,7 +42,8 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
         this.robotAnimated.playState("run", true);
 
         this.hitbox = new Graphics();
-        this.hitbox.beginFill(0xFF00FF, 0.0001);
+        this.hitbox.beginFill(0xFF00FF);
+        this.hitbox.visible = false;
         this.hitbox.drawRect(0, -175, 100, 175);
         this.hitbox.endFill;
         this.hitbox.pivot.x = this.hitbox.width / 2;
@@ -126,7 +127,7 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
 
                 //
                 this.x += platformSpeed;
-                
+
 
                 if (this.speed.x !== 0) {
                     this.robotAnimated.playState("run", false)
@@ -136,8 +137,8 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
                 }
 
             } else if (this.y > platform.y) {
-               // this.y += overlap.height;
-               //  this.speed.y = 0;
+                // this.y += overlap.height;
+                //  this.speed.y = 0;
             }
         }
     }
