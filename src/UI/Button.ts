@@ -25,28 +25,19 @@ export class Button extends Container {
         this.eventMode = 'static'; // replaces interactive true
         this.cursor = 'pointer';
 
-        this.onmouseover = () => {
-            button.tint = button.tint as number + 10000;
-        }
 
-        this.onmouseout = () => {
+        this.onpointerdown = () => {
             button.tint = button.tint as number - 10000;
         }
 
-        this.onpointerout = () => {
-            this.scale.set(this.scale.x / 0.9);
-        }
 
-        this.onpointerdown = () => {
-            this.scale.set(this.scale.x * 0.9);
-        }
 
         this.onpointerup = () => {
-            this.scale.set(1);
+            button.tint = 0xf52261;
         }
 
         this.onpointerupoutside = () => {
-            this.scale.set(1);
+            button.tint = 0xf52261;
         }
 
     }
