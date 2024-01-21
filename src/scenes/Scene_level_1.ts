@@ -154,20 +154,25 @@ export class Scene_level_1 extends Container implements IScene {
         })
         this.addChild(this.button_back);
 
-        const circlemask = new Graphics();
-        circlemask.position.set(Manager.width / 2, Manager.height / 2);
-        circlemask.beginFill(0xFFFFFF);
-        circlemask.drawCircle(0, 0, 150);
-        circlemask.scale.set(0.05);
-        this.addChild(circlemask);
+        const circlemask2 = new Graphics();
+        circlemask2.position.set(Manager.width / 2, Manager.height / 2);
+        circlemask2.beginFill(0xFFFFFF);
+        circlemask2.drawCircle(0, 0, 150);
+        circlemask2.scale.set(0.05);
+        this.addChild(circlemask2);
 
-        this.mask = circlemask;
+        this.mask = circlemask2;
+        
 
-        new Tween(circlemask)
+        new Tween(circlemask2)
             .to({ scale: { x: 10, y: 10 } }, 600)
             .easing(Easing.Quintic.In)
             .start()
-            .onComplete(() => { this.removeChild(circlemask); })
+            .onComplete(() => {
+                this.mask = null;
+                this.removeChild(circlemask2);
+                circlemask2.destroy();
+            })
 
         this.clockIcon = Sprite.from("clock.png");
         this.clockIcon.anchor.set(0.5);

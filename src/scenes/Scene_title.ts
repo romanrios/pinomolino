@@ -52,7 +52,7 @@ export class Scene_title extends Container implements IScene {
         }
 
         const text1 = new Text(
-            "¡Hola! Soy Pino, vivo en\nEl Molino Fábrica Cultural,\n¡Ayudame a juntar botones\nantes que se acabe el tiempo!"
+            "Hola! Soy Pino, vivo en\nEl Molino Fabrica Cultural,\nAyudame a juntar botones\nantes que se acabe el tiempo!"
             , { fontFamily: "Montserrat Bold", fill: 0x4D4D4D, fontSize: 15, lineHeight: 27 });
         text1.position.set(618, 348);
         container.addChild(text1)
@@ -61,7 +61,7 @@ export class Scene_title extends Container implements IScene {
         buttonJugar.position.set(740, 520);
         buttonJugar.eventMode = "static";
         buttonJugar.on("pointerup", () => {
-            
+
             buttonJugar.eventMode = "none";
             const circlemask = new Graphics();
             circlemask.position.set(Manager.width / 2, Manager.height / 2);
@@ -82,7 +82,7 @@ export class Scene_title extends Container implements IScene {
         container.addChild(buttonJugar);
 
         const text2 = new Text(
-            "© 2023 Román Ríos\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
+            "© 2023 ROMAN RIOS\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
             , { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 15, lineHeight: 30, align: "center" });
         text2.anchor.x = 0.5;
         text2.position.set(Manager.width / 2, 605);
@@ -95,16 +95,16 @@ export class Scene_title extends Container implements IScene {
             .on("pointerout", () => { text2.scale.set(1) })
         container.addChild(text2)
 
-        const circlemask = new Graphics();
-        circlemask.position.set(Manager.width / 2, Manager.height / 2);
-        circlemask.beginFill(0xFFFFFF);
-        circlemask.drawCircle(0, 0, 150);
-        circlemask.scale.set(0.05);
-        this.addChild(circlemask);
+        const circlemask2 = new Graphics();
+        circlemask2.position.set(Manager.width / 2, Manager.height / 2);
+        circlemask2.beginFill(0xFFFFFF);
+        circlemask2.drawCircle(0, 0, 150);
+        circlemask2.scale.set(0.05);
+        this.addChild(circlemask2);
 
-        this.mask = circlemask;
+        this.mask = circlemask2;
 
-        new Tween(circlemask)
+        new Tween(circlemask2)
             .to({ scale: { x: 10, y: 10 } }, 600)
             .easing(Easing.Quintic.In)
             .start()
@@ -113,7 +113,11 @@ export class Scene_title extends Container implements IScene {
                     .to({ y: 0 }, 800)
                     .start()
                     .easing(Easing.Bounce.Out)
-                this.removeChild(circlemask);
+                    .onComplete(() => {
+                        this.mask = null;
+                        this.removeChild(circlemask2);
+                        circlemask2.destroy();
+                    })
             })
 
 
