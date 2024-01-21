@@ -82,7 +82,7 @@ export class Scene_title extends Container implements IScene {
         container.addChild(buttonJugar);
 
         const text2 = new Text(
-            "© 2023 ROMAN RIOS\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
+            "(C) 2023 ROMAN RIOS\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
             , { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 15, lineHeight: 30, align: "center" });
         text2.anchor.x = 0.5;
         text2.position.set(Manager.width / 2, 605);
