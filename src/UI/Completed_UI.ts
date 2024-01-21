@@ -38,7 +38,7 @@ export class Completed_UI extends Container {
         clock.position.set(Manager.width / 2, 165);
         this.addChild(clock);
 
-        const text_congrat = new Text("Felicitaciones!\nTu puntaje es:", { fontFamily: "Montserrat Bold", align: "right", fill: "0x4D4D4D", fontSize: 22, lineHeight: 30 });
+        const text_congrat = new Text("¡Felicitaciones!\nTu puntaje es:", { fontFamily: "Montserrat Bold", align: "right", fill: "0x4D4D4D", fontSize: 22, lineHeight: 30 });
         text_congrat.anchor.set(0.5);
         text_congrat.position.set(bg.x - 90, 347);
         this.addChild(text_congrat);

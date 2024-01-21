@@ -52,7 +52,7 @@ export class Scene_title extends Container implements IScene {
         }
 
         const text1 = new Text(
-            "Hola! Soy Pino, vivo en\nEl Molino Fabrica Cultural,\nAyudame a juntar botones\nantes que se acabe el tiempo!"
+            "¡Hola! Soy Pino, vivo en\nEl Molino Fábrica Cultural,\n¡Ayudame a juntar botones\nantes que se acabe el tiempo!"
             , { fontFamily: "Montserrat Bold", fill: 0x4D4D4D, fontSize: 15, lineHeight: 27 });
         text1.position.set(618, 348);
         container.addChild(text1)
@@ -82,7 +82,7 @@ export class Scene_title extends Container implements IScene {
         container.addChild(buttonJugar);
 
         const text2 = new Text(
-            "(C) 2023 ROMAN RIOS\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
+            "© 2023 Román Ríos\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
             , { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 15, lineHeight: 30, align: "center" });
         text2.anchor.x = 0.5;
         text2.position.set(Manager.width / 2, 605);
