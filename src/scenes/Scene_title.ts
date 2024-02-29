@@ -95,6 +95,43 @@ export class Scene_title extends Container implements IScene {
             .on("pointerout", () => { text2.scale.set(1) })
         container.addChild(text2)
 
+
+
+        // Si no estamos en un dispositivo móvil, y por alguna razón queremos
+        // los controles táctiles, podemos activarlos de esta manera 
+
+        const text3 = new Text(
+            "Mostrar controles táctiles: NO"
+            , { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 15, lineHeight: 30, align: "center" });
+        text3.anchor.set(0.5);
+        text3.position.set(140, 30);
+        text3.eventMode = "static";
+        text3.cursor = "pointer";
+        text3.on("pointerup", () => {
+
+            if (!Manager.showTouchControls) {
+                Manager.showTouchControls = true;
+                text3.text = "Mostrar controles táctiles: SÍ";
+                sound.play("pip4");
+            } else {
+                Manager.showTouchControls = false;
+                text3.text = "Mostrar controles táctiles: NO";
+                sound.play("pip2");
+            }
+
+        })
+            .on("pointerover", () => { text3.scale.set(1.05) })
+            .on("pointerout", () => { text3.scale.set(1) })
+        container.addChild(text3)
+
+        if (Manager.showTouchControls) {
+            text3.text = "Mostrar controles táctiles: SÍ";
+        } else {
+            text3.text = "Mostrar controles táctiles: NO";
+        };
+
+
+
         const circlemask2 = new Graphics();
         circlemask2.position.set(Manager.width / 2, Manager.height / 2);
         circlemask2.beginFill(0xFFFFFF);
@@ -139,6 +176,7 @@ export class Scene_title extends Container implements IScene {
         button_back.scale.set(1.2);
         button_back.visible = false;
         button_back.on("pointerup", () => {
+            sound.play("pip2");
             highScore.visible = false;
             black_alpha.visible = false;
             container.visible = true;
@@ -157,6 +195,7 @@ export class Scene_title extends Container implements IScene {
         button_ranking.position.set(1195, 90);
         button_ranking.eventMode = "static";
         button_ranking.on("pointerup", () => {
+            sound.play("pip4");
             highScore.visible = true;
             black_alpha.visible = true;
             container.visible = false;
@@ -200,17 +239,21 @@ export class Scene_title extends Container implements IScene {
         const button_fullscreen = new ButtonCircle("button_fullscreen.png");
         button_fullscreen.scale.set(0.8);
         button_fullscreen.position.set(1070, 60);
-        button_fullscreen.onpointerdown = () => {
+        button_fullscreen.eventMode="static";
+        button_fullscreen.on("pointerup", () => {
+
             if (!document.fullscreenElement) {
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
+                    sound.play("pip4");
                 }
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
+                    sound.play("pip2");
                 }
             }
-        };
+        });
         container.addChild(button_fullscreen);
 
 

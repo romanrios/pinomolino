@@ -1,4 +1,4 @@
-import { Container, Graphics, Sprite, Text, Texture, TilingSprite, isMobile } from "pixi.js";
+import { Container, Graphics, Sprite, Text, Texture, TilingSprite } from "pixi.js";
 import { IScene } from "../utils/IScene";
 import { Manager } from "../utils/Manager";
 import { Player_Pino } from "../game/Player_Pino";
@@ -16,30 +16,30 @@ import { ButtonCircle } from "../UI/ButtonCircle";
 
 export class Scene_level_1 extends Container implements IScene {
 
+    private world: Container;
     private player: Player_Pino;
-    private platforms: Platform[] = [];
+    private background: TilingSprite;
+    private table: TilingSprite;
     private platform1: Platform;
     private platform2: Platform;
     private platform3: Platform;
-    private world: Container;
-    private background: TilingSprite;
-    private table: TilingSprite;
-    private items: Item[] = [];
-    private score: Text;
     private platform4: Platform;
     private platform5: Platform;
+    private platforms: Platform[] = [];
+    private items: Item[] = [];
+    private clocks: ItemClock[] = [];
+    private clockIcon: Sprite;
+    private score: Text;
     private cantidadBotones: number = 0;
     private botonesMaximos: number = 10;
-    private molino: Sprite;
     private timerCounter: number = 0
     private timerNumber: number = 30;
     private timerText: Text;
-    private clocks: ItemClock[] = [];
-    private clockIcon: Sprite;
     private gameState: string = "none";
     private button_back: Button_pino;
     private UI_number_container: Sprite;
     private platform1speedX: number = 0;
+    private molino: Sprite;
 
     constructor() {
         super();
@@ -201,7 +201,7 @@ export class Scene_level_1 extends Container implements IScene {
             .start()
             .repeat(Infinity);
 
-        if (isMobile.any || isMobile.android.device) {
+        if (Manager.showTouchControls) {
             this.addChild(new TouchControllers(this.player))
         };
 
@@ -369,9 +369,7 @@ export class Scene_level_1 extends Container implements IScene {
         }
         // limit vertical
         if (this.player.y > Manager.height - 100) {
-            // if (this.playerRobot.canJump == false && this.particle.emit == true) {
-            //     this.cartoonSmoke.emit = true
-            // }
+
             this.player.y = Manager.height - 100;
             this.player.speed.y = 0;
             this.player.canJump = true;

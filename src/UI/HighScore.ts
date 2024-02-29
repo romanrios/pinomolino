@@ -15,9 +15,27 @@ export class HighScore extends Container {
     this.addChild(this.board);
 
 
+    const text2 = new Text(
+      "[ Ver puntajes anteriores ]"
+      , { fontFamily: "Montserrat Bold", fill: 0xFFFFFF, fontSize: 15, lineHeight: 30, align: "center" });
+    text2.anchor.x = 0.5;
+    text2.position.set(220, 635);
+    text2.eventMode = "static";
+    text2.cursor = "pointer";
+    text2.on("pointerup", () => {
+      window.open("https://romanrios.github.io/scores/pinomolino", "_blank");
+    })
+      .on("pointerover", () => { text2.scale.set(1.05) })
+      .on("pointerout", () => { text2.scale.set(1) })
+    this.addChild(text2)
+
+
+
+
+
     // Obtiene una referencia a la ubicación de los puntajes
     const database = getDatabase();
-    const puntajesRef = ref(database, 'puntajes');
+    const puntajesRef = ref(database, 'puntajes2');
 
     // Realiza una consulta para obtener los puntajes ordenados por puntaje (en orden descendente)
     const consultaPuntajes = query(puntajesRef, orderByChild('puntaje')); // Obtener los últimos 10 puntajes

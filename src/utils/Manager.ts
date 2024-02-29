@@ -1,4 +1,4 @@
-import { Application, Ticker } from "pixi.js";
+import { Application, Ticker, isMobile } from "pixi.js";
 import { IScene } from "./IScene";
 import { Group } from "tweedle.js";
 
@@ -11,6 +11,8 @@ export class Manager {
     private static currentScene: IScene;
 
     public static muted: boolean = false;
+    public static showTouchControls: boolean = false;
+
 
     // Width and Height are read-only after creation (for now)
     private static _width: number;
@@ -30,6 +32,10 @@ export class Manager {
 
     // Use this function ONCE to start the entire machinery
     public static initialize(width: number, height: number, background: number): void {
+
+        if(isMobile.any){
+            Manager.showTouchControls = true;
+        }
 
         // store our width and height
         Manager._width = width;

@@ -3,6 +3,7 @@ import { PhysicsContainer } from "../utils/PhysicsContainer";
 import { Keyboard } from "../utils/Keyboard";
 import { IHitbox } from "./IHitbox";
 import { StateAnimation } from "./StateAnimation";
+import { sound } from "@pixi/sound";
 
 export class Player_Pino extends PhysicsContainer implements IHitbox {
 
@@ -83,12 +84,9 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
         } else if (Keyboard.state.get("ArrowLeft")) {
             this.speed.x = -Player_Pino.MOVE_SPEED;
             this.robotAnimated.scale.x = -1;
-
         }
 
-        // if (Keyboard.state.get("ArrowDown")) {
-        //     this.speed.y = 1400;
-        // }
+
     }
 
     // la contraparte de agregar eventos al teclado, debemos apagarlos
@@ -100,6 +98,7 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
     // Pública para poder acceder desde Clase_12_AnimationScene.ts
     jump() {
         if (this.canJump) {
+            sound.play("jump",{volume:0.4});
             this.canJump = false;
             this.speed.y = -Player_Pino.JUMP;
             this.robotAnimated.playState("jump", false);

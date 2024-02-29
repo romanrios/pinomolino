@@ -28,6 +28,7 @@ export const manifest: ResolverManifest = {
                 clocksound: "clock.mp3",
                 Beep: "beep.mp3",
                 whoosh: "whoosh.mp3",
+                jump: "jump.mp3",
             }
         }
     ]
