@@ -98,7 +98,7 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
     // Pública para poder acceder desde Clase_12_AnimationScene.ts
     jump() {
         if (this.canJump) {
-            sound.play("jump",{volume:0.4});
+            sound.play("jump",{volume:0.4, singleInstance:true});
             this.canJump = false;
             this.speed.y = -Player_Pino.JUMP;
             this.robotAnimated.playState("jump", false);

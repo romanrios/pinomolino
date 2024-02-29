@@ -112,11 +112,11 @@ export class Scene_title extends Container implements IScene {
             if (!Manager.showTouchControls) {
                 Manager.showTouchControls = true;
                 text3.text = "Mostrar controles táctiles: SÍ";
-                sound.play("pip4");
+                sound.play("pip4", { singleInstance: true });
             } else {
                 Manager.showTouchControls = false;
                 text3.text = "Mostrar controles táctiles: NO";
-                sound.play("pip2");
+                sound.play("pip2", { singleInstance: true });
             }
 
         })
@@ -176,7 +176,7 @@ export class Scene_title extends Container implements IScene {
         button_back.scale.set(1.2);
         button_back.visible = false;
         button_back.on("pointerup", () => {
-            sound.play("pip2");
+            sound.play("pip2", { singleInstance: true });
             highScore.visible = false;
             black_alpha.visible = false;
             container.visible = true;
@@ -195,7 +195,7 @@ export class Scene_title extends Container implements IScene {
         button_ranking.position.set(1195, 90);
         button_ranking.eventMode = "static";
         button_ranking.on("pointerup", () => {
-            sound.play("pip4");
+            sound.play("pip4", { singleInstance: true });
             highScore.visible = true;
             black_alpha.visible = true;
             container.visible = false;
@@ -239,18 +239,18 @@ export class Scene_title extends Container implements IScene {
         const button_fullscreen = new ButtonCircle("button_fullscreen.png");
         button_fullscreen.scale.set(0.8);
         button_fullscreen.position.set(1070, 60);
-        button_fullscreen.eventMode="static";
+        button_fullscreen.eventMode = "static";
         button_fullscreen.on("pointerup", () => {
 
             if (!document.fullscreenElement) {
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
-                    sound.play("pip4");
+                    sound.play("pip4", { singleInstance: true });
                 }
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
-                    sound.play("pip2");
+                    sound.play("pip2", { singleInstance: true });
                 }
             }
         });

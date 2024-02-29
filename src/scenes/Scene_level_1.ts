@@ -224,7 +224,7 @@ export class Scene_level_1 extends Container implements IScene {
                 this.timerText.visible = true;
                 this.timerText.text = String(Number(this.timerText.text) - 1);
                 if (this.timerText.text != "0") {
-                    sound.play("Beep", { volume: 0.4 });
+                    sound.play("Beep", { volume: 0.4, singleInstance:true });
                 }
                 if (this.timerText.text == "0") {
                     this.gameState = "started"
@@ -237,7 +237,7 @@ export class Scene_level_1 extends Container implements IScene {
             this.timerCounter = 0;
 
             if (this.timerNumber <= 3 && this.timerNumber >= 0) {
-                sound.play("Beep", { volume: 0.4 });
+                sound.play("Beep", { volume: 0.4, singleInstance:true });
             }
         }
 
