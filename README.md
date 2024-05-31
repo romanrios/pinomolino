@@ -1,10 +1,6 @@
-
-
 # Pino en el Molino 🕹️
 
 ![Presentación pinomolino](https://github.com/romanrios/pinomolino/assets/122373737/e7ed01ca-2d39-4339-8d60-fcf202a60037)
-
- 
 
 
 | Description                                                                                                     |
@@ -16,8 +12,6 @@
 | Credits                                                                                                         |
 |-----------------------------------------------------------------------------------------------------------------|
 | Design, programming, and music by Román Ríos. |
-
-
 
 
 
@@ -42,7 +36,7 @@
     </tr>
     <tr>
       <td align="center"> 
-        Pixi.js
+        PixiJS
       </td>
       <td align="center"> 
         TypeScript
