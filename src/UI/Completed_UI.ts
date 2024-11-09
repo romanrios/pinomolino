@@ -214,32 +214,41 @@ export class Completed_UI extends Container {
         this.button_retry.scale.set(0.9);
         this.button_retry.eventMode = "static";
         this.button_retry.position.set(590, 565);
-        this.button_retry.on("pointerup", () => {
+        this.button_retry.on("pointerup", () => { if (!Scene_level_1.isTransitioning) { this.goToLevel() } });
 
-            this.button_retry.eventMode = "none";
+    }   
 
-            // remove html input
-            document.body.removeChild(this.input.htmlInput);
 
-            const circlemask = new Graphics();
-            circlemask.position.set(Manager.width / 2, Manager.height / 2);
-            circlemask.beginFill(0x994466);
-            circlemask.drawCircle(0, 0, 150);
-            circlemask.scale.set(10);
-            this.addChild(circlemask);
 
-            this.parent.mask = circlemask;
 
-            Sound.from({
-                url: "whoosh.mp3", singleInstance: true, volume: 0.5
-            }).play();
+    public goToLevel() {
+        Scene_level_1.isTransitioning = true;
 
-            new Tween(circlemask)
-                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
-                .easing(Easing.Quintic.Out)
-                .start()
-                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_level_1()); })
-        })
+        this.button_retry.eventMode = "none";
 
+        // remove html input
+        document.body.removeChild(this.input.htmlInput);
+
+        const circlemask = new Graphics();
+        circlemask.position.set(Manager.width / 2, Manager.height / 2);
+        circlemask.beginFill(0x994466);
+        circlemask.drawCircle(0, 0, 150);
+        circlemask.scale.set(10);
+        this.addChild(circlemask);
+
+        this.parent.mask = circlemask;
+
+        Sound.from({
+            url: "whoosh.mp3", singleInstance: true, volume: 0.5
+        }).play();
+
+        new Tween(circlemask)
+            .to({ scale: { x: 0.05, y: 0.05 } }, 600)
+            .easing(Easing.Quintic.Out)
+            .start()
+            .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_level_1()); })
     }
+
+
+
 }

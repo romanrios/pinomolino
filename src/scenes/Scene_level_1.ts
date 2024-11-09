@@ -13,6 +13,7 @@ import { ItemClock } from "../game/ItemClock";
 import { Completed_UI } from "../UI/Completed_UI";
 import { TouchControllers } from "../UI/TouchControllers";
 import { ButtonCircle } from "../UI/ButtonCircle";
+import { GamepadController } from "../utils/GamepadController";
 
 export class Scene_level_1 extends Container implements IScene {
 
@@ -20,6 +21,7 @@ export class Scene_level_1 extends Container implements IScene {
     private player: Player_Pino;
     private background: TilingSprite;
     private table: TilingSprite;
+    private platformFloor: Platform;
     private platform1: Platform;
     private platform2: Platform;
     private platform3: Platform;
@@ -40,6 +42,9 @@ export class Scene_level_1 extends Container implements IScene {
     private UI_number_container: Sprite;
     private platform1speedX: number = 0;
     private molino: Sprite;
+    private circlemask: Graphics = new Graphics();
+    public static isTransitioning = true;
+    private completed: any;
 
     constructor() {
         super();
@@ -59,14 +64,18 @@ export class Scene_level_1 extends Container implements IScene {
         this.addChild(this.world)
 
         const hex_blocks = Sprite.from("hex_blocks.png");
-        hex_blocks.scale.set(1.5);
-        hex_blocks.position.set(-398, -17);
+        hex_blocks.position.set(-27, 26);
         this.world.addChild(hex_blocks);
 
         const hex_blocks2 = Sprite.from("hex_blocks.png");
-        hex_blocks2.scale.set(1.5);
-        hex_blocks2.position.set(2976, -17);
+        hex_blocks2.position.set(3010, 26);
         this.world.addChild(hex_blocks2);
+
+        this.platformFloor = new Platform();
+        this.platformFloor.position.set(50, 642);
+        this.platformFloor.scale.x = 10;
+        this.platformFloor.visible = false;
+        this.platforms.push(this.platformFloor);
 
         this.platform1 = new Platform();
         this.platform1.position.set(1900, 300);
@@ -131,27 +140,7 @@ export class Scene_level_1 extends Container implements IScene {
         this.button_back = new ButtonCircle("button_back.png");
         this.button_back.eventMode = "static";
         this.button_back.position.set(72, 50);
-        this.button_back.on("pointerup", () => {
-
-            const circlemask = new Graphics();
-            circlemask.position.set(Manager.width / 2, Manager.height / 2);
-            circlemask.beginFill(0x994466);
-            circlemask.drawCircle(0, 0, 150);
-            circlemask.scale.set(10);
-            this.addChild(circlemask);
-
-            this.mask = circlemask;
-
-            Sound.from({
-                url: "whoosh.mp3", singleInstance: true, volume: 0.5
-            }).play();
-
-            new Tween(circlemask)
-                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
-                .easing(Easing.Quintic.Out)
-                .start()
-                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title("title")) })
-        })
+        this.button_back.on("pointerup", () => { this.goToTitle() })
         this.addChild(this.button_back);
 
         const circlemask2 = new Graphics();
@@ -162,7 +151,7 @@ export class Scene_level_1 extends Container implements IScene {
         this.addChild(circlemask2);
 
         this.mask = circlemask2;
-        
+
 
         new Tween(circlemask2)
             .to({ scale: { x: 10, y: 10 } }, 600)
@@ -172,6 +161,7 @@ export class Scene_level_1 extends Container implements IScene {
                 this.mask = null;
                 this.removeChild(circlemask2);
                 circlemask2.destroy();
+                Scene_level_1.isTransitioning = false;
             })
 
         this.clockIcon = Sprite.from("clock.png");
@@ -224,7 +214,7 @@ export class Scene_level_1 extends Container implements IScene {
                 this.timerText.visible = true;
                 this.timerText.text = String(Number(this.timerText.text) - 1);
                 if (this.timerText.text != "0") {
-                    sound.play("Beep", { volume: 0.4, singleInstance:true });
+                    sound.play("Beep", { volume: 0.4, singleInstance: true });
                 }
                 if (this.timerText.text == "0") {
                     this.gameState = "started"
@@ -237,7 +227,7 @@ export class Scene_level_1 extends Container implements IScene {
             this.timerCounter = 0;
 
             if (this.timerNumber <= 3 && this.timerNumber >= 0) {
-                sound.play("Beep", { volume: 0.4, singleInstance:true });
+                sound.play("Beep", { volume: 0.4, singleInstance: true });
             }
         }
 
@@ -262,18 +252,24 @@ export class Scene_level_1 extends Container implements IScene {
                     .to({ alpha: 0.5 }, 800)
                     .start()
 
-                const completed = new Completed_UI(this.score.text);
-                completed.y = -720;
+                this.completed = new Completed_UI(this.score.text);
+                this.completed.y = -720;
 
-                this.addChild(completed);
-                new Tween(completed)
+                this.addChild(this.completed);
+                new Tween(this.completed)
                     .to({ y: 0 }, 800)
                     .start()
                     .easing(Easing.Bounce.Out)
             }
         }
+        // Define los límites para la cámara
+        const minX = -1980; // Límite izquierdo
+        const maxX = -50; // Límite derecho (ajusta este valor según el tamaño de tu mundo)
 
         this.world.x = -this.player.x * this.worldTransform.a + Manager.width / 2;
+
+        this.world.x = Math.max(minX, Math.min(this.world.x, maxX));
+
         this.background.tilePosition.x = this.world.x * 0.15;
         this.background.tilePosition.x %= Manager.width;
         this.table.tilePosition.x = this.world.x;
@@ -371,7 +367,7 @@ export class Scene_level_1 extends Container implements IScene {
         if (this.player.y > Manager.height - 100) {
 
             this.player.y = Manager.height - 100;
-            this.player.speed.y = 0;
+            // this.player.speed.y = 0;
             this.player.canJump = true;
             if (this.player.speed.x !== 0) {
                 this.player.playState("run", false)
@@ -385,6 +381,18 @@ export class Scene_level_1 extends Container implements IScene {
             this.crearBotones();
             this.timerText.text = String(this.secondsToMinutes(this.timerNumber));
         }
+
+
+        if (GamepadController.isButtonPressed(8)) {
+            this.goToTitle();
+        }
+
+        if (GamepadController.isButtonPressed(9) && this.gameState == "finished" && !Scene_level_1.isTransitioning) {
+            this.completed.goToLevel();
+        }
+
+
+
 
     }
     // **** UPDATE END ****
@@ -484,6 +492,32 @@ export class Scene_level_1 extends Container implements IScene {
             objeto.previousX = objeto.x;
 
             return velocidadX;
+        }
+    }
+
+    private goToTitle() {
+
+        if (!Scene_level_1.isTransitioning) {
+
+            Scene_level_1.isTransitioning = true;
+
+            this.circlemask.position.set(Manager.width / 2, Manager.height / 2);
+            this.circlemask.beginFill(0x994466);
+            this.circlemask.drawCircle(0, 0, 150);
+            this.circlemask.scale.set(10);
+            this.addChild(this.circlemask);
+
+            this.mask = this.circlemask;
+
+            Sound.from({
+                url: "whoosh.mp3", singleInstance: true, volume: 0.5
+            }).play();
+
+            new Tween(this.circlemask)
+                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
+                .easing(Easing.Quintic.Out)
+                .start()
+                .onComplete(() => { sound.stopAll(); Manager.changeScene(new Scene_title("title")) })
         }
     }
 

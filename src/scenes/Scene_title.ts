@@ -8,8 +8,11 @@ import { Scene_level_1 } from "./Scene_level_1";
 import { Easing, Tween } from "tweedle.js";
 import { HighScore } from "../UI/HighScore";
 import { ButtonCircle } from "../UI/ButtonCircle";
+import { GamepadController } from "../utils/GamepadController";
 
 export class Scene_title extends Container implements IScene {
+    private buttonJugar: Button_pino;
+    private isTransitioning = true;
 
     constructor(title_or_highscore: string) {
         super()
@@ -57,29 +60,13 @@ export class Scene_title extends Container implements IScene {
         text1.position.set(618, 348);
         container.addChild(text1)
 
-        const buttonJugar = new Button_pino("Jugar", "button_bg.png")
-        buttonJugar.position.set(740, 520);
-        buttonJugar.eventMode = "static";
-        buttonJugar.on("pointerup", () => {
-
-            buttonJugar.eventMode = "none";
-            const circlemask = new Graphics();
-            circlemask.position.set(Manager.width / 2, Manager.height / 2);
-            circlemask.beginFill(0x994466);
-            circlemask.drawCircle(0, 0, 150);
-            circlemask.scale.set(10);
-            this.addChild(circlemask);
-
-            this.mask = circlemask;
-
-            new Tween(circlemask)
-                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
-                .easing(Easing.Quintic.Out)
-                .start()
-                .onComplete(() => { Manager.changeScene(new Scene_level_1()) })
+        this.buttonJugar = new Button_pino("Jugar", "button_bg.png")
+        this.buttonJugar.position.set(740, 520);
+        this.buttonJugar.eventMode = "static";
+        this.buttonJugar.on("pointerup", () => {
+            this.goToLevel();
         });
-
-        container.addChild(buttonJugar);
+        container.addChild(this.buttonJugar);
 
         const text2 = new Text(
             "© 2023 Román Ríos\nCreado con el apoyo de The Rabbit Hole\ny Capital Activa, Municipalidad de Santa Fe"
@@ -154,6 +141,7 @@ export class Scene_title extends Container implements IScene {
                         this.mask = null;
                         this.removeChild(circlemask2);
                         circlemask2.destroy();
+                        this.isTransitioning = false;
                     })
             })
 
@@ -261,6 +249,32 @@ export class Scene_title extends Container implements IScene {
     }
 
     update(_deltaTime: number, _deltaFrame: number): void {
-        // throw new Error("Method not implemented.");
+
+        if (GamepadController.isButtonPressed(0) || GamepadController.isButtonPressed(1) || GamepadController.isButtonPressed(2) || GamepadController.isButtonPressed(3) || GamepadController.isButtonPressed(9)) {
+            this.goToLevel();
+        }
     }
+
+
+
+    private goToLevel() {
+        if (!this.isTransitioning) {
+            this.isTransitioning = true;
+            const circlemask = new Graphics();
+            circlemask.position.set(Manager.width / 2, Manager.height / 2);
+            circlemask.beginFill(0x994466);
+            circlemask.drawCircle(0, 0, 150);
+            circlemask.scale.set(10);
+            this.addChild(circlemask);
+
+            this.mask = circlemask;
+
+            new Tween(circlemask)
+                .to({ scale: { x: 0.05, y: 0.05 } }, 600)
+                .easing(Easing.Quintic.Out)
+                .start()
+                .onComplete(() => { Manager.changeScene(new Scene_level_1()) })
+        }
+    }
+
 }

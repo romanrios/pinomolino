@@ -4,6 +4,8 @@ import { Keyboard } from "../utils/Keyboard";
 import { IHitbox } from "./IHitbox";
 import { StateAnimation } from "./StateAnimation";
 import { sound } from "@pixi/sound";
+import { GamepadController } from "../utils/GamepadController";
+
 
 export class Player_Pino extends PhysicsContainer implements IHitbox {
 
@@ -11,6 +13,7 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
     private static readonly GRAVITY = 3000;
     private static readonly MOVE_SPEED = 350;
     private static readonly JUMP = 1200;
+    public isMoving = false;
     public canJump = true;
     private robotAnimated: StateAnimation;
     private hitbox: Graphics;
@@ -54,22 +57,7 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
 
         this.acceleration.y = Player_Pino.GRAVITY;
 
-        Keyboard.down.on("ArrowUp", this.jump, this)
-
-        // agregado para que no anule botones touch
-        Keyboard.up.on("ArrowLeft", () => {
-            this.speed.x = 0;
-        });
-
-        Keyboard.up.on("ArrowRight", () => {
-            this.speed.x = 0;
-        });
     }
-
-
-
-
-
 
 
 
@@ -78,32 +66,62 @@ export class Player_Pino extends PhysicsContainer implements IHitbox {
         super.update(deltaMS / 1000);
         //this.robotAnimated.update(deltaMS / (1000 / 60), 0)
 
+        // Prioridad para controles de teclado
         if (Keyboard.state.get("ArrowRight")) {
-            this.speed.x = Player_Pino.MOVE_SPEED;
-            this.robotAnimated.scale.x = 1
+            this.moveRight();
         } else if (Keyboard.state.get("ArrowLeft")) {
-            this.speed.x = -Player_Pino.MOVE_SPEED;
-            this.robotAnimated.scale.x = -1;
+            this.moveLeft();
+        } else {
+            // Si el teclado no está en uso, usar controles de gamepad
+            const joystickDirection = GamepadController.getJoystickDirection();
+            if (joystickDirection) {
+                if (joystickDirection.x > 0.5) {
+                    this.moveRight();
+                } else if (joystickDirection.x < -0.5) {
+                    this.moveLeft();
+                } else if (!this.isMoving) {
+                    this.speed.x = 0;
+                }
+            } else if (!this.isMoving) {
+                this.speed.x = 0;
+            }
         }
 
 
+        // Control de salto
+        if ((Keyboard.state.get("ArrowUp") || GamepadController.isButtonPressed(0) || GamepadController.isButtonPressed(1) || GamepadController.isButtonPressed(2) || GamepadController.isButtonPressed(3)) && this.canJump) {
+            this.jump();
+        }
+        
+
+
+
     }
 
-    // la contraparte de agregar eventos al teclado, debemos apagarlos
-    public override destroy(options: any) {
-        super.destroy(options);
-        Keyboard.down.off("ArrowUp", this.jump)
+
+
+    private moveRight() {
+        this.speed.x = Player_Pino.MOVE_SPEED;
+        this.robotAnimated.scale.x = 1;
     }
 
-    // Pública para poder acceder desde Clase_12_AnimationScene.ts
+
+    private moveLeft() {
+        this.speed.x = -Player_Pino.MOVE_SPEED;
+        this.robotAnimated.scale.x = -1;
+    }
+
+
+
+
+    // Pública para poder acceder desde la escena
     jump() {
-        if (this.canJump) {
-            sound.play("jump",{volume:0.4, singleInstance:true});
-            this.canJump = false;
-            this.speed.y = -Player_Pino.JUMP;
-            this.robotAnimated.playState("jump", false);
-        }
+        this.canJump = false;
+        sound.play("jump", { volume: 0.4, singleInstance: true });
+        this.speed.y = -Player_Pino.JUMP;
+        this.robotAnimated.playState("jump", false);
     }
+
 
     public getHitbox(): Rectangle {
         return this.hitbox.getBounds()

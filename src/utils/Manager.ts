@@ -1,6 +1,7 @@
 import { Application, Ticker, isMobile } from "pixi.js";
 import { IScene } from "./IScene";
 import { Group } from "tweedle.js";
+import { GamepadController } from "./GamepadController";
 
 export class Manager {
 
@@ -32,6 +33,8 @@ export class Manager {
 
     // Use this function ONCE to start the entire machinery
     public static initialize(width: number, height: number, background: number): void {
+
+        GamepadController.initialize(); // Inicializa el controlador de Gamepad
 
         if(isMobile.any){
             Manager.showTouchControls = true;
