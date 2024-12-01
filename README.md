@@ -56,11 +56,12 @@
 
 ## Demo
 
-🕹️ [Gato.us](https://www.gato.us/game/pino-en-el-molino)
+🕹️ [GitHub Pages](https://romanrios.github.io/pinomolino/)
 
 🕹️ [Itch.io](https://romanrios.itch.io/pinomolino)
 
-🕹️ [GitHub Pages](https://romanrios.github.io/pinomolino/)
+
+🕹️ [Gato.us](https://www.gato.us/game/pino-en-el-molino)
 
 
 ## Screenshots
